@@ -1,0 +1,1228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Settlement Review Kit: a concept prototype for the Razorpay x ISB AI PM Build Challenge (Track 1). Synthetic data; integrations simulated.">
+<title>Settlement Review Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@500;600;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+/* Layout: a phone-sized Razorpay app beside a slim demo rail; a risk-analyst console opens over the stage.
+   Colours and type follow Razorpay's open-source Blade design system (azure 500 primary, azure 900 navy, Inter + TASA Orbiter). */
+:root{
+  --bg: hsl(222 26% 93%);
+  --app: hsl(220 20% 97%);
+  --surface: hsl(0 0% 100%);
+  --surface-2: hsl(220 18% 95%);
+  --line: hsl(214 14% 88%);
+  --ink: hsl(214 26% 12%);
+  --ink-2: hsl(214 10% 36%);
+  --ink-3: hsl(214 8% 52%);
+  --accent: hsl(218 89% 51%);
+  --accent-ink: hsl(218 87% 43%);
+  --accent-soft: hsl(218 100% 95%);
+  --btn: hsl(218 89% 51%);
+  --btn-ink: hsl(0 0% 100%);
+  --navy: hsl(218 90% 20%);
+  --on-navy: hsl(0 0% 100%);
+  --on-navy-2: hsl(218 100% 86%);
+  --on-navy-line: hsl(218 60% 34%);
+  --good: hsl(150 100% 25%);
+  --good-soft: hsl(150 45% 92%);
+  --warn: hsl(25 100% 35%);
+  --warn-soft: hsl(30 100% 93%);
+  --bad: hsl(4 85% 43%);
+  --bad-soft: hsl(5 80% 95%);
+  --paper: hsl(40 30% 98%);
+  --chat: hsl(38 30% 89%);
+  --bubble: hsl(97 58% 86%);
+  --toast-bg: hsl(214 26% 14%);
+  --toast-ink: hsl(0 0% 100%);
+  --scrim: hsl(220 40% 10% / .45);
+  --frame: hsl(220 20% 13%);
+  --console: hsl(220 14% 97%);
+  --shadow: 0 1px 2px hsl(220 30% 20% / .06), 0 8px 24px hsl(220 30% 20% / .10);
+  --font-display: "TASA Orbiter", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-text: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg: hsl(222 24% 6%); --app: hsl(222 20% 9%); --surface: hsl(222 17% 13%); --surface-2: hsl(222 15% 17%);
+    --line: hsl(222 12% 24%); --ink: hsl(214 22% 94%); --ink-2: hsl(214 10% 72%); --ink-3: hsl(214 8% 58%);
+    --accent: hsl(218 100% 70%); --accent-ink: hsl(218 100% 80%); --accent-soft: hsl(218 55% 21%);
+    --btn: hsl(218 89% 55%); --btn-ink: hsl(0 0% 100%); --navy: hsl(218 70% 19%); --on-navy: hsl(0 0% 100%);
+    --on-navy-2: hsl(218 100% 86%); --on-navy-line: hsl(218 50% 32%);
+    --good: hsl(150 55% 60%); --good-soft: hsl(150 40% 15%); --warn: hsl(28 100% 67%); --warn-soft: hsl(25 50% 16%);
+    --bad: hsl(5 82% 70%); --bad-soft: hsl(5 45% 17%); --paper: hsl(222 14% 16%);
+    --chat: hsl(205 25% 9%); --bubble: hsl(167 100% 19%);
+    --toast-bg: hsl(214 20% 92%); --toast-ink: hsl(214 26% 12%); --scrim: hsl(222 40% 3% / .6);
+    --frame: hsl(222 14% 3%); --console: hsl(222 17% 11%);
+    --shadow: 0 1px 2px hsl(0 0% 0% / .3), 0 8px 24px hsl(0 0% 0% / .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg: hsl(222 24% 6%); --app: hsl(222 20% 9%); --surface: hsl(222 17% 13%); --surface-2: hsl(222 15% 17%);
+  --line: hsl(222 12% 24%); --ink: hsl(214 22% 94%); --ink-2: hsl(214 10% 72%); --ink-3: hsl(214 8% 58%);
+  --accent: hsl(218 100% 70%); --accent-ink: hsl(218 100% 80%); --accent-soft: hsl(218 55% 21%);
+  --btn: hsl(218 89% 55%); --btn-ink: hsl(0 0% 100%); --navy: hsl(218 70% 19%); --on-navy: hsl(0 0% 100%);
+  --on-navy-2: hsl(218 100% 86%); --on-navy-line: hsl(218 50% 32%);
+  --good: hsl(150 55% 60%); --good-soft: hsl(150 40% 15%); --warn: hsl(28 100% 67%); --warn-soft: hsl(25 50% 16%);
+  --bad: hsl(5 82% 70%); --bad-soft: hsl(5 45% 17%); --paper: hsl(222 14% 16%);
+  --chat: hsl(205 25% 9%); --bubble: hsl(167 100% 19%);
+  --toast-bg: hsl(214 20% 92%); --toast-ink: hsl(214 26% 12%); --scrim: hsl(222 40% 3% / .6);
+  --frame: hsl(222 14% 3%); --console: hsl(222 17% 11%);
+  --shadow: 0 1px 2px hsl(0 0% 0% / .3), 0 8px 24px hsl(0 0% 0% / .35);
+  color-scheme: dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.45 var(--font-text);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:tabular-nums}
+
+/* stage */
+.stage{min-height:100%;display:flex;gap:48px;justify-content:center;align-items:flex-start;padding-block:28px;padding-inline:16px}
+.rail{width:310px;flex:none;display:flex;flex-direction:column;gap:20px;position:sticky;top:28px;padding-top:12px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-ink)}
+.rail h1{font:700 38px/1.05 var(--font-display);letter-spacing:-.02em;margin:6px 0 10px;text-wrap:balance}
+.rail p{margin:0;color:var(--ink-2);font-size:14.5px}
+.clock{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:2px 12px}
+.clock-label{font-size:12px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;grid-column:1/-1}
+.clock-val{font:700 32px/1 var(--font-display);font-variant-numeric:tabular-nums}
+.clock-val.ok{color:var(--good)}
+.clock-goal{font-size:12.5px;color:var(--ink-3);padding-bottom:3px;text-align:right}
+.rail h2{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.types button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;text-align:left;font-size:13px;font-weight:600;line-height:1.25}
+.types button small{display:block;font-weight:500;color:var(--ink-3);font-size:11.5px;margin-top:2px}
+.types button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.types-note{font-size:12.5px;color:var(--ink-3);margin:8px 0 0}
+.tryit{margin:0;padding-left:20px;color:var(--ink-2);display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.controls{display:flex;flex-direction:column;gap:8px}
+.ctl{height:42px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-weight:600;display:flex;align-items:center;gap:10px;padding:0 14px;text-align:left}
+.ctl:hover:not(:disabled){border-color:var(--accent);color:var(--accent-ink)}
+.ctl:disabled{opacity:.5;cursor:not-allowed}
+.ctl .i{color:var(--accent)}
+.ctl.strong{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.ctl.strong .i{color:var(--on-navy-2)}
+.ctl.strong:hover:not(:disabled){color:var(--on-navy);filter:brightness(1.15)}
+.ctl-hint{font-size:12.5px;color:var(--ink-3);margin:0}
+.demo-date{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.demo-date b{color:var(--ink)}
+.fine{font-size:12px !important;color:var(--ink-3) !important;border-top:1px solid var(--line);padding-top:12px}
+
+/* phone */
+.device{flex:none}
+.phone{width:390px;height:min(820px, calc(100dvh - 56px));min-height:640px;border:10px solid var(--frame);border-radius:44px;background:var(--app);overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.status{height:32px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font-size:13px;font-weight:600;background:var(--surface)}
+.status-icons{display:flex;gap:6px;align-items:center}
+.sig{display:flex;gap:2px;align-items:flex-end;height:11px}
+.sig i{width:3px;background:var(--ink);border-radius:1px}
+.bat{width:22px;height:11px;border:1.5px solid var(--ink);border-radius:3px;padding:1px}
+.bat i{display:block;height:100%;width:72%;background:var(--ink);border-radius:1px}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+@media (max-width: 380px){.fill button .ft small{font-size:12px}.order-sub{word-break:break-all}}
+@media (max-width: 800px){
+  .stage{flex-direction:column;align-items:stretch;gap:24px}
+  .rail{width:auto;position:static;order:2;padding-top:0}
+  .rail h1{font-size:32px}
+  .device{order:1}
+  .phone{width:100%;max-width:440px;margin:0 auto;height:min(780px, calc(100dvh - 40px));min-height:560px;border:1px solid var(--line);border-radius:20px}
+  .status{display:none}
+}
+
+/* app chrome */
+.bar{display:flex;align-items:center;gap:6px;padding:8px 10px 8px 6px;min-height:56px;background:var(--surface);border-bottom:1px solid var(--line);flex:none}
+.bar h1{font:600 17px/1.2 var(--font-display);margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .step{font-size:12px;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.icon-btn{width:40px;height:40px;border-radius:999px;border:0;background:transparent;display:grid;place-items:center;flex:none;color:var(--ink)}
+.icon-btn:hover{background:var(--surface-2)}
+.scroll{flex:1;min-height:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin}
+.cta{flex:none;padding:12px 16px 16px;background:var(--surface);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.cta-hint{font-size:12.5px;color:var(--ink-3);text-align:center;margin:0}
+.btn{min-height:48px;border-radius:8px;border:0;padding:0 18px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.btn-block{width:100%}
+.btn-primary{background:var(--btn);color:var(--btn-ink)}
+.btn-primary:hover:not(:disabled){filter:brightness(.95)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:transparent;color:var(--accent-ink);border:1px solid var(--line)}
+.btn-sm{min-height:36px;font-size:14px;padding:0 14px}
+.link-btn{border:0;background:none;padding:4px 0;color:var(--accent-ink);font-weight:600;text-align:left}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h3{font:600 15px/1.25 var(--font-display);margin:0}
+.sec{font:600 15px/1.2 var(--font-display);margin:0 0 8px}
+.sub{font-size:13px;color:var(--ink-3)}
+.pill{font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.t-good{background:var(--good-soft);color:var(--good)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-accent{background:var(--accent-soft);color:var(--accent-ink)}
+.t-neutral{background:var(--surface-2);color:var(--ink-2)}
+
+/* home */
+.apphead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex:none}
+.biz{display:flex;gap:10px;align-items:center;min-width:0}
+.avatar{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.biz-name{font-weight:600;font-size:15px}
+.biz-sub{font-size:12px;color:var(--ink-3)}
+.alert{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface)}
+.alert.hold{border-color:var(--warn);box-shadow:inset 4px 0 0 var(--warn)}
+.alert.done{border-color:var(--good);box-shadow:inset 4px 0 0 var(--good)}
+.alert-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.alert-title{font-weight:700;font-size:15px}
+.alert-amt{font:700 26px/1.1 var(--font-display);font-variant-numeric:tabular-nums}
+.alert-sub{font-size:13px;color:var(--ink-2)}
+.alert-cta{display:inline-flex;align-items:center;gap:4px;color:var(--accent-ink);font-weight:600;font-size:14px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi span{font-size:12px;color:var(--ink-3)}
+.kpi b{display:block;font:700 18px/1.2 var(--font-display);font-variant-numeric:tabular-nums;margin-top:2px}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column}
+.row{display:flex;gap:12px;align-items:center;padding:11px 14px}
+.row+.row{border-top:1px solid var(--line)}
+.row-ic{width:32px;height:32px;border-radius:999px;display:grid;place-items:center;flex:none}
+.row-ic .i{width:17px;height:17px}
+.row-main{flex:1;min-width:0}
+.row-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-sub{font-size:12.5px;color:var(--ink-3)}
+.row-amt{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.tabbar{flex:none;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px 10px}
+.tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink-3);padding:4px 0}
+.tabbar button[aria-current="page"]{color:var(--accent-ink);font-weight:600}
+
+/* case */
+.hero{background:var(--navy);color:var(--on-navy);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.hero-label{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--on-navy-2)}
+.hero-amt{font:700 30px/1.05 var(--font-display);font-variant-numeric:tabular-nums}
+.hero-sub{color:var(--on-navy-2);font-size:13px}
+.due{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--on-navy-line);font-size:13px}
+.due b{font-weight:700}
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.stepper div{display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--on-navy-2)}
+.stepper i{height:4px;border-radius:999px;background:var(--on-navy-line)}
+.stepper .on i{background:var(--on-navy)}
+.stepper .on{color:var(--on-navy);font-weight:600}
+.reassure{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);background:var(--good-soft);border-radius:10px;padding:10px 12px}
+.reassure .i{color:var(--good);width:18px;height:18px;margin-top:1px}
+.need-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.progress{height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.progress i{display:block;height:100%;background:var(--good);border-radius:999px;transition:width .3s}
+.fill{display:flex;flex-direction:column;margin-top:12px;border-top:1px solid var(--line)}
+.fill button{display:flex;align-items:center;gap:12px;padding:11px 0;border:0;background:none;text-align:left;width:100%}
+.fill button+button{border-top:1px solid var(--line)}
+.fill button:hover .ft b{color:var(--accent-ink)}
+.fi{width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.fill button.used .fi{background:var(--good-soft);color:var(--good)}
+.ft{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.ft b{font-weight:600;font-size:14px}
+.ft small{font-size:12.5px;color:var(--ink-3);line-height:1.35}
+.fill .chev{color:var(--ink-3)}
+.kind{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:4px}
+.persona{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink-2)}
+.persona b{color:var(--ink);font-size:13.5px}
+.decl{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);text-align:left}
+.decl input{width:20px;height:20px;margin:0;accent-color:var(--btn);flex:none}
+.ai-tag{font-size:10.5px;font-weight:700;letter-spacing:.04em;background:var(--accent-soft);color:var(--accent-ink);border-radius:4px;padding:1px 5px}
+.orders{display:flex;flex-direction:column;gap:8px}
+.order{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
+.order:hover{border-color:var(--accent)}
+.order-top{display:flex;justify-content:space-between;gap:8px}
+.order-id{font-weight:600}
+.order-amt{font-weight:700;font-variant-numeric:tabular-nums}
+.order-sub{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.st{font-size:12px;font-weight:600;padding:4px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;border:1px solid transparent}
+.st .i{width:14px;height:14px}
+.st.need{background:var(--surface-2);color:var(--ink-2)}
+.st.ok{background:var(--good-soft);color:var(--good)}
+.st.flag{background:var(--bad-soft);color:var(--bad)}
+.st.note{background:var(--warn-soft);color:var(--warn)}
+.st.soft{background:var(--good-soft);color:var(--good);border-color:var(--warn)}
+.links{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.links button{display:flex;align-items:center;gap:10px;padding:12px 14px;border:0;background:transparent;text-align:left;font-weight:500}
+.links button+button{border-top:1px solid var(--line)}
+.links button .i{color:var(--accent)}
+.links button span{flex:1}
+.delta{border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.delta b{color:var(--accent-ink)}
+
+/* review / pack */
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:16px 14px;box-shadow:0 2px 8px hsl(220 30% 20% / .08);font-size:12px}
+.paper h4{font:700 13px/1.2 var(--font-display);margin:0 0 2px}
+.paper .meta{color:var(--ink-3);font-size:11.5px;margin-bottom:10px}
+.paper table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.paper th{text-align:left;font-weight:600;color:var(--ink-3);font-size:11px;padding:5px 4px;border-bottom:1px solid var(--line)}
+.paper td{padding:6px 4px;border-bottom:1px dashed var(--line);vertical-align:top}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.check input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--btn);flex:none}
+
+/* tracker */
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{display:grid;grid-template-columns:22px 1fr;gap:12px;padding:0 0 16px;position:relative}
+.timeline li:not(:last-child)::after{content:"";position:absolute;left:10px;top:22px;bottom:2px;width:2px;background:var(--line)}
+.timeline .dot{width:22px;height:22px;border-radius:999px;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;position:relative;z-index:1}
+.timeline .dot .i{width:13px;height:13px;stroke-width:2.6}
+.timeline .done .dot{background:var(--good);border-color:var(--good);color:var(--btn-ink)}
+.timeline .now .dot{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.timeline .tl-title{font-weight:600}
+.timeline .tl-sub{font-size:12.5px;color:var(--ink-3)}
+.stopwatch{align-self:flex-start;display:inline-flex;gap:6px;align-items:center;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.stopwatch .i{width:15px;height:15px}
+
+/* sheet, push, toast */
+.overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:flex-end}
+.scrim{position:absolute;inset:0;background:var(--scrim);border:0;padding:0;cursor:default}
+.sheet{position:relative;background:var(--surface);border-radius:18px 18px 0 0;padding:8px 16px 16px;max-height:90%;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.sheet.anim{animation:up .22s ease-out}
+.grab{width:40px;height:4px;border-radius:999px;background:var(--line);margin:0 auto 4px}
+.sheet-x{position:absolute;top:8px;right:8px}
+.sheet h2{font:700 18px/1.25 var(--font-display);margin:0;padding-right:40px}
+.sheet p{margin:0}
+.sheet .lead{color:var(--ink-2);font-size:13.5px}
+.files{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.file{display:flex;align-items:center;gap:12px;padding:10px 12px;border:0;background:transparent;text-align:left;width:100%}
+.file+.file{border-top:1px solid var(--line)}
+.file[aria-pressed="true"]{background:var(--accent-soft)}
+.file-main{flex:1;min-width:0}
+.file-name{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-sub{display:block;overflow-wrap:anywhere}
+.file-main{min-width:0}
+.rail code{font-size:12px;overflow-wrap:anywhere}
+.src{background:var(--surface-2);border-radius:8px;padding:12px;display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:14px;font-size:12.5px}
+.src-page{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:10px;font-size:11px;line-height:1.5;box-shadow:0 1px 3px hsl(220 30% 20% / .1)}
+.src-page b{font-size:12px}
+.src dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+.src dt{color:var(--ink-3)}
+.src dd{margin:0}
+.ok-t{color:var(--good);font-weight:600}.no-t{color:var(--warn);font-weight:600}.na-t{color:var(--ink-3);font-weight:600}
+.sim{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--warn-soft);color:var(--warn);border-radius:4px;padding:1px 5px}
+.receipt{border:1.5px dashed var(--good);border-radius:12px;padding:12px 14px;background:var(--good-soft);font-size:13px;display:flex;flex-direction:column;gap:4px}
+.receipt b{font-size:14px}
+.c-table .linkbtn{border:0;background:none;color:var(--accent-ink);font-weight:600;padding:2px 0;font-size:12px}
+@media (max-width: 640px){.src{grid-template-columns:1fr}}
+.file-sub{font-size:12px;color:var(--ink-3)}
+.thumb{width:40px;height:48px;border-radius:5px;flex:none;border:1px solid var(--line);background:var(--paper);position:relative;overflow:hidden}
+.thumb.pdf::before{content:"PDF";position:absolute;left:3px;top:3px;font-size:8px;font-weight:800;color:var(--bad)}
+.thumb.pdf::after{content:"";position:absolute;left:6px;right:6px;top:18px;height:22px;background:repeating-linear-gradient(var(--line) 0 2px, transparent 2px 6px)}
+.thumb.chat{background:var(--chat)}
+.thumb.chat::before{content:"";position:absolute;right:4px;top:8px;width:24px;height:9px;border-radius:4px;background:var(--bubble)}
+.thumb.chat::after{content:"";position:absolute;left:4px;top:22px;width:22px;height:9px;border-radius:4px;background:var(--surface)}
+.thumb.photo{background:linear-gradient(160deg, hsl(30 60% 70%), hsl(15 50% 45%))}
+.thumb.photo2{background:linear-gradient(160deg, hsl(320 40% 65%), hsl(280 35% 40%))}
+.tick{width:22px;height:22px;border-radius:999px;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.file[aria-pressed="true"] .tick{background:var(--btn);border-color:var(--btn);color:var(--btn-ink)}
+.tick .i{width:13px;height:13px;stroke-width:3}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-3)}
+.steps li.done{color:var(--ink)}
+.steps li.done .sp{border-color:var(--good);background:var(--good);color:var(--btn-ink)}
+.steps li.run .sp{border-top-color:var(--accent);animation:spin .8s linear infinite}
+.sp{width:20px;height:20px;border-radius:999px;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.sp .i{width:12px;height:12px;stroke-width:3}
+.results{display:flex;flex-direction:column;gap:8px}
+.res{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.res .ic{width:24px;height:24px;border-radius:999px;display:grid;place-items:center}
+.res .ic .i{width:14px;height:14px;stroke-width:2.6}
+.res-title{font-weight:600;font-size:13.5px}
+.res-sub{font-size:12.5px;color:var(--ink-2)}
+.res.ok .ic{background:var(--good-soft);color:var(--good)}
+.res.flag{border-color:var(--bad)}
+.res.flag .ic{background:var(--bad-soft);color:var(--bad)}
+.res.soft .ic{background:var(--warn-soft);color:var(--warn)}
+.res.skip .ic{background:var(--surface-2);color:var(--ink-3)}
+.ai-foot{font-size:12px;color:var(--ink-3);display:flex;gap:6px;align-items:flex-start}
+.ai-foot .i{width:15px;height:15px;color:var(--accent);margin-top:1px}
+.consent{background:var(--surface-2);border-radius:10px;padding:12px;font-size:13px;color:var(--ink-2)}
+.notes{display:flex;flex-direction:column;gap:8px}
+.notes button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px;text-align:left;font-weight:500}
+.notes button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ladder li{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:13.5px}
+.ladder b.n{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-size:12px}
+.hi{font-size:15px;line-height:1.7}
+.push{position:absolute;top:8px;left:8px;right:8px;z-index:30;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:10px 12px;display:flex;gap:10px;align-items:flex-start;text-align:left;animation:down .28s ease-out}
+.push[hidden]{display:none}
+.push-ic{width:30px;height:30px;border-radius:8px;background:var(--btn);color:var(--btn-ink);display:grid;place-items:center;flex:none}
+.push-ic .i{width:16px;height:16px}
+.push-app{font-size:11.5px;color:var(--ink-3)}
+.push-title{font-weight:600;font-size:13.5px}
+.push-body{font-size:13px;color:var(--ink-2)}
+.toast{position:absolute;left:16px;right:16px;bottom:90px;z-index:40;background:var(--toast-bg);color:var(--toast-ink);border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow);animation:up .2s ease-out}
+.toast[hidden]{display:none}
+
+/* analyst console */
+.console-wrap{position:fixed;inset:0;z-index:50;background:var(--scrim);display:flex;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto}
+.console-wrap[hidden]{display:none}
+.console{width:min(860px, 100%);background:var(--console);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.c-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;background:var(--navy);color:var(--on-navy)}
+.c-head h2{font:600 15px/1.2 var(--font-display);margin:0}
+.c-head small{color:var(--on-navy-2);font-size:12px}
+.c-head .icon-btn{color:var(--on-navy)}
+.c-head .icon-btn:hover{background:var(--on-navy-line)}
+.c-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.c-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.c-meta div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--ink-3);min-width:0}
+.c-meta b{display:block;color:var(--ink);font-size:13.5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.c-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+.c-table th{text-align:left;padding:8px 10px;background:var(--surface-2);color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap}
+.c-table td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.c-table tr:last-child td{border-bottom:0}
+.c-summary{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px}
+.c-summary .i{color:var(--accent)}
+.c-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.c-actions .btn{min-height:40px;font-size:14px}
+.c-foot{font-size:12px;color:var(--ink-3)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--ink-2)}
+.cmp b{display:block;color:var(--ink);font-size:13px;margin-bottom:4px}
+@media (max-width: 640px){.c-meta{grid-template-columns:1fr 1fr}.cmp{grid-template-columns:1fr}}
+
+@keyframes up{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+@keyframes down{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <aside class="rail" aria-label="About this prototype">
+    <div>
+      <div class="eyebrow">Razorpay in Your Pocket · Track 1</div>
+      <h1>Settlement Review Kit</h1>
+      <p>When Razorpay holds a settlement for a review that needs evidence, the merchant sees exactly what's needed for which payments, prepares it on the phone, and gets a submission receipt. The review decision stays with Razorpay.</p>
+    </div>
+    <div class="persona"><span class="avatar">R</span><span><b>Riya, Ghoomar Studio, Jaipur</b> <span class="sim">Persona</span><br>Drawn from public merchant complaints. Sells ethnic wear on Instagram, ships with Shiprocket (account already linked). A festive spike led to a hold on ₹3,18,400. All figures are synthetic.</span></div>
+    <div class="clock" aria-live="polite">
+      <span class="clock-label">Active task time: case opened to receipt</span>
+      <span class="clock-val" id="rail-clock">0:00</span>
+      <span class="clock-goal">Target: under 2:00 with files ready</span>
+    </div>
+    <div class="demo-date"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Demo date: <b id="rail-date"></b></span></div>
+    <div>
+      <h2>Hold type (set by Razorpay risk ops)</h2>
+      <div class="types" id="types"></div>
+      <p class="types-note" id="types-note"></p>
+    </div>
+    <ol class="tryit" id="tryit">
+      <li>Tap the notification.</li>
+      <li>Upload the invoice PDF, then fetch delivery status from Shiprocket.</li>
+      <li>Fix the one flagged invoice; add the customer's WhatsApp screenshot for the hand-delivered order.</li>
+      <li>Review the evidence pack and submit. You get a receipt; refresh the page and your progress is still there.</li>
+      <li>Open the risk analyst's view: View source, accept the items, then ask for one more item, keep the hold, or release.</li>
+      <li>Want real reading? In the invoice picker, choose “a PDF from this device” and use <code>samples/Ghoomar_invoices_SAMPLE.pdf</code>: one page needs your confirmation, one has a wrong total.</li>
+    </ol>
+    <div class="controls">
+      <button class="ctl strong" id="btn-analyst" data-act="analystOpen"></button>
+      <p class="ctl-hint" id="analyst-hint"></p>
+      <button class="ctl" data-act="reset"><svg class="i" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/></svg>Start over</button>
+    </div>
+    <p class="fine">Concept prototype for the Razorpay x ISB AI PM Build Challenge, built by a participant. Not a Razorpay product. Synthetic data only. Simulated: the hold service, document reading, Shiprocket lookup, analyst console, notifications and decisions. Real in this file: the case state machine, deterministic amount and order checks, saved progress, receipts and the requirement-level review record. Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="device">
+    <div class="phone" id="phone">
+      <div class="status" aria-hidden="true"><span>4:12</span><span class="status-icons"><span class="sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></span><span class="bat"><i></i></span></span></div>
+      <div class="screen" id="screen"></div>
+      <button class="push" id="push" hidden data-act="pushTap"></button>
+      <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+      <div id="sheet"></div>
+    </div>
+  </div>
+</div>
+<div class="console-wrap" id="console" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- utilities ---------- */
+const DAY = 864e5;
+const T0 = '2026-10-13';
+const parse = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+const F = o => new Intl.DateTimeFormat('en-IN', Object.assign({ timeZone: 'UTC' }, o));
+const fDM = F({ day: 'numeric', month: 'short' }), fWDM = F({ weekday: 'short', day: 'numeric', month: 'short' }), fFull = F({ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+const dm = s => fDM.format(parse(s)), wdm = s => fWDM.format(parse(s)), full = s => fFull.format(parse(s));
+const daysBetween = (a, b) => Math.round((parse(b) - parse(a)) / DAY);
+const nf = new Intl.NumberFormat('en-IN');
+const inr = n => '₹' + nf.format(Math.round(n));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = s => document.querySelector(s);
+const svg = p => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+const I = {
+  back: svg('<path d="M15 5l-7 7 7 7"/>'), close: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+  bell: svg('<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+  check: svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), chev: svg('<path d="M9 6l6 6-6 6"/>'),
+  alert: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7.5V13M12 16.5v.01"/>'),
+  info: svg('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/>'),
+  file: svg('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
+  truck: svg('<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'),
+  chat: svg('<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/>'),
+  shield: svg('<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>'),
+  lock: svg('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  ladder: svg('<path d="M7 3v18M17 3v18M7 7h10M7 12h10M7 17h10"/>'),
+  lang: svg('<path d="M4 5h8M8 3v2M6 5c0 4 2 7 6 8M10 5c0 4-3 7-6 8"/><path d="M13 20l4-9 4 9M14.5 17h5"/>'),
+  clock: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  home: svg('<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>'), receipt: svg('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),
+  bank: svg('<path d="M3 9l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>'), user: svg('<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'),
+  sparkle: svg('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>'),
+  console: svg('<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 2-3 2M12 13h5"/>'),
+  police: svg('<path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M12 9l1 2h2l-1.6 1.3.6 2.2-2-1.3-2 1.3.6-2.2L9 11h2z"/>'),
+  id: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5.5 16c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4M15 10h3M15 13h3"/>'),
+};
+
+/* ---------- data ---------- */
+const BIZ = { name: 'Ghoomar Studio', short: 'GS', city: 'Jaipur', owner: 'Riya' };
+const CASE = { id: 'HRK-24817', held: 318400, since: '2026-10-12', due: '2026-10-16', recent: 214 };
+const ORDERS = [
+  { id: '1038', pay: 'pay_Pk2mLq4T7aB1038', cust: 'Anjali M.', amt: 2150, date: '2026-10-03', page: 41, courier: 'Delhivery', awb: '1490821244710', delivered: '2026-10-07' },
+  { id: '1041', pay: 'pay_Pk2nX8cVb2Q1041', cust: 'Neha K.', amt: 1390, date: '2026-10-03', page: 48, courier: 'Xpressbees', awb: '1418210377519', delivered: '2026-10-06' },
+  { id: '1044', pay: 'pay_Pk2pR1rTe8W1044', cust: 'Pooja S.', amt: 1450, date: '2026-10-04', page: 57, courier: 'Delhivery', awb: '1490821253318', delivered: '2026-10-08', invAmt: 1250 },
+  { id: '1046', pay: 'pay_Pk2qY4hYu6E1046', cust: 'Kavya R.', amt: 3280, date: '2026-10-04', page: 63, courier: 'Ekart', awb: 'FMPP2215983071', delivered: '2026-10-09' },
+  { id: '1047', pay: 'pay_Pk2rT8kWo3Z1047', cust: 'Simran D.', amt: 1180, date: '2026-10-05', page: 66, courier: null, awb: null, delivered: null },
+  { id: '1052', pay: 'pay_Pk2sZ2jPa5X1052', cust: 'Meera J.', amt: 2640, date: '2026-10-05', page: 81, courier: 'Delhivery', awb: '1490821288402', delivered: '2026-10-10', noName: true },
+];
+const byO = id => ORDERS.find(o => o.id === id);
+const extOf = o => (S && S.items[o.id].inv.ext) || null;
+const invAmtShown = o => { const e = extOf(o); return e ? e.amount : (o.invAmt || o.amt); };
+const invPage = o => { const e = extOf(o); return e ? e.page : o.page; };
+const nameOnInv = o => { const e = extOf(o); return e ? e.name : (o.noName ? null : o.cust); };
+const PDFS = [
+  { id: 'inv', name: 'Ghoomar_invoices_1-12Oct.pdf', sub: 'Downloads · 214 pages · 9.8 MB', kind: 'pdf' },
+  { id: 'gst', name: 'GST_certificate.pdf', sub: 'WhatsApp Documents · 1 page', kind: 'pdf' },
+  { id: 'cat', name: 'Festive_catalogue_2026.pdf', sub: 'Downloads · 18 pages', kind: 'pdf' },
+];
+const PICS = [
+  { id: 'parcel', name: 'IMG_20261004_1812.jpg', sub: 'Gallery · Camera · 4 Oct', kind: 'photo' },
+  { id: 'simran', name: 'Screenshot_2026-10-06-21-14.jpg', sub: 'Gallery · Screenshots · 6 Oct', kind: 'chat', who: 'Simran D.', text: '“Got the lehenga today, it’s beautiful. Thank you!”' },
+  { id: 'kavya', name: 'Screenshot_2026-10-09-11-40.jpg', sub: 'Gallery · Screenshots · 9 Oct', kind: 'chat', who: 'Kavya R.', text: '“Delivered, love the colour”' },
+  { id: 'meera', name: 'Screenshot_2026-10-10-19-02.jpg', sub: 'Gallery · Screenshots · 10 Oct', kind: 'chat', who: 'Meera J.', text: '“Received both kurtas, thank you Riya!”' },
+];
+const TYPES = {
+  delivery: { label: 'Delivery check', small: 'Asks merchant for evidence' },
+  confidential: { label: 'No documents requested', small: 'Review or triage; never asks' },
+  police: { label: 'Police request', small: 'One payment, CFCFRMS' },
+  rekyc: { label: 'KYC update due', small: 'Routes to KYC flow' },
+};
+const TYPE_NOTES = {
+  delivery: 'Risk ops marks this hold as eligible for merchant evidence, so the app shows exactly what to send.',
+  confidential: 'Reviews that need nothing from the merchant, and holds not yet classified, share one neutral screen with a next-update date. Internally an unclassified hold is “classification pending”: it gets an owner and a 24-hour triage deadline, so it is never silently parked. Risk reasons stay internal.',
+  police: 'A police (cyber-fraud) hold on one payment. Razorpay can’t release it, so the app explains the process and helps the merchant prepare her own grievance file. Shown only where the law lets Razorpay notify the merchant.',
+  rekyc: 'Settlements pause 30 days before a periodic KYC update is due. The fix belongs in the KYC update flow, not in an evidence pack.',
+};
+
+let S, seq = 0;
+const fresh = (scenario = 'delivery', rev = 0) => ({
+  rev, today: T0, scenario, screen: 'home', stack: [], disp: {}, versions: [], shipDeclined: false, inspect: null,
+  items: Object.fromEntries(ORDERS.map(o => [o.id, { inv: { s: 'need' }, pod: { s: 'need' }, conf: null }])),
+  used: { pdf: false, ship: false, wa: false },
+  stage: 'requested', round: 1, delta: null, sheet: null, declared: false,
+  timer: { start: null, end: null }, submittedAt: null, analyst: false, pushed: false,
+  log: [{ date: '2026-10-12', text: 'Settlement of ₹3,18,400 put on hold for review' }, { date: '2026-10-12', text: 'Request sent: invoice and delivery proof for 6 payments' }],
+});
+
+/* ---------- item helpers ---------- */
+const DONE = new Set(['ok', 'note', 'soft']);
+const isPending = it => it.src === 'pending';
+const itemDone = it => DONE.has(it.s) && !isPending(it);
+function counts() {
+  let done = 0, total = 0, flags = 0, pending = 0;
+  ORDERS.forEach(o => { const x = S.items[o.id]; [x.inv, x.pod].forEach(it => { total++; if (itemDone(it)) done++; if (isPending(it)) pending++; if (it.s === 'flag') flags++; }); });
+  return { done, total, flags, pending, ready: done + pending === total };
+}
+const packLine = () => { const c = counts(); return c.pending ? `${c.done} of ${c.total} items, ${c.pending} delivery pending` : `complete pack, ${c.total} of ${c.total} items`; };
+const deltaItem = () => S.delta ? (S.delta.kind === 'pod' ? S.items[S.delta.order].pod : S.items[S.delta.order].conf) : null;
+const deltaDone = () => { const it = deltaItem(); return !!it && itemDone(it); };
+const deltaReq = () => S.delta ? `${S.delta.order}-${S.delta.kind}` : null;
+/* requirement-level review record: every count after submission is derived from these dispositions */
+const REQS = () => { const r = []; ORDERS.forEach(o => { r.push(o.id + '-inv', o.id + '-pod'); if (S.items[o.id].conf || S.disp[o.id + '-conf']) r.push(o.id + '-conf'); }); return r; };
+const reqItem = id => { const [o, k] = id.split('-'); return S.items[o][k]; };
+const dispCount = d => REQS().filter(r => S.disp[r] === d).length;
+const allAccepted = () => REQS().every(r => !S.disp[r] || S.disp[r] === 'accepted') && REQS().some(r => S.disp[r] === 'accepted');
+const DL = { 'in-review': 'In review', accepted: 'Accepted', clarification: 'Needs clarification', pending: 'Pending', requested: 'Requested', superseded: 'Superseded' };
+const DCLS = { 'in-review': 'need', accepted: 'ok', clarification: 'note', pending: 'note', requested: 'need', superseded: 'need' };
+function itemLabel(k, it) {
+  if (isPending(it)) return 'Pending';
+  if (it.s === 'need') return 'Needed';
+  if (it.s === 'flag') return 'Check';
+  if (k === 'inv') return it.replaced ? 'Replaced' : it.s === 'note' ? 'Explained' : it.s === 'soft' ? 'Matched, no name' : it.confirmed ? 'Linked by you' : 'Matched';
+  if (it.src === 'courier') return 'Courier record';
+  if (it.src === 'awb') return 'Tracking no. given';
+  if (it.src === 'chat') return 'Screenshot';
+  return 'Added';
+}
+function chip(label, it, k, reqId) {
+  if (reqId && S.disp[reqId]) { const d = S.disp[reqId]; return `<span class="st ${DCLS[d]}">${d === 'accepted' ? I.check : d === 'clarification' || d === 'pending' ? I.info : ''}${label}: ${DL[d]}</span>`; }
+  const ic = it.s === 'ok' || it.s === 'soft' ? I.check : it.s === 'flag' ? I.alert : it.s === 'note' ? I.info : '';
+  return `<span class="st ${it.s}">${ic}${label}: ${itemLabel(k, it)}</span>`;
+}
+const nowTime = () => new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit' }).format(new Date());
+
+/* ---------- screens ---------- */
+const bar = (title, right = '', back = 'back') => `<header class="bar"><button class="icon-btn" data-act="${back}" aria-label="Back">${I.back}</button><h1>${esc(title)}</h1>${right}</header>`;
+
+function homeAlert() {
+  const sc = S.scenario;
+  if (sc === 'delivery') {
+    if (S.stage === 'released') return `<button class="alert done" data-act="go" data-to="tracker"><div class="alert-top"><span class="alert-title">Settlement released</span><span class="pill t-good">Settles ${dm('2026-10-16')}</span></div><div class="alert-amt">${inr(CASE.held)}</div><span class="alert-cta">See details ${I.chev}</span></button>`;
+    const c = counts();
+    const st = S.stage === 'requested' ? (c.done || c.pending ? `${c.done} of ${c.total} items ready · respond by ${wdm(CASE.due)}` : `${c.total} items needed for 6 payments · respond by ${wdm(CASE.due)}`)
+      : S.stage === 'more' ? '1 more item needed' : 'Under review · we’ll update you here';
+    const inRev = S.stage === 'submitted' || S.stage === 'continued';
+    const to = inRev ? 'tracker' : 'case';
+    return `<button class="alert hold" data-act="openCase" data-to="${to}"><div class="alert-top"><span class="alert-title">Settlement on hold</span>${inRev ? `<span class="pill t-accent">${S.stage === 'continued' ? 'Review continues' : 'In review'}</span>` : '<span class="pill t-warn">Action needed</span>'}</div>
+      <div class="alert-amt">${inr(CASE.held)}</div><div class="alert-sub">${S.stage === 'continued' ? `Nothing needed from you · next update by ${wdm('2026-10-20')}` : st}</div><span class="alert-cta">${inRev ? 'Track review' : 'See what’s needed'} ${I.chev}</span></button>`;
+  }
+  if (sc === 'confidential') return `<button class="alert hold" data-act="openCase" data-to="confidential"><div class="alert-top"><span class="alert-title">Settlement under review</span><span class="pill t-accent">No action needed</span></div><div class="alert-amt">${inr(CASE.held)}</div><span class="alert-cta">See status ${I.chev}</span></button>`;
+  if (sc === 'police') return `<button class="alert hold" data-act="openCase" data-to="police"><div class="alert-top"><span class="alert-title">One payment on hold</span><span class="pill t-warn">Police request</span></div><div class="alert-amt">${inr(14999)}</div><div class="alert-sub">Your other settlements continue as normal.</div><span class="alert-cta">See details ${I.chev}</span></button>`;
+  return `<button class="alert hold" data-act="openCase" data-to="rekyc"><div class="alert-top"><span class="alert-title">Settlements paused</span><span class="pill t-warn">KYC update due</span></div><div class="alert-amt">2 items</div><div class="alert-sub">Update your KYC by ${wdm('2026-11-12')} to resume settlements.</div><span class="alert-cta">Update KYC ${I.chev}</span></button>`;
+}
+function scrHome() {
+  const pays = [['Ishita P.', 1890, '13 Oct', 'UPI'], ['Farah N.', 3100, '13 Oct', 'UPI'], ['Aditi K.', 1240, '12 Oct', 'Card'], ['Rohan S.', 2450, '12 Oct', 'UPI']];
+  return `<header class="apphead"><div class="biz"><span class="avatar">${BIZ.short}</span><div><div class="biz-name">${BIZ.name}</div><div class="biz-sub">${BIZ.city} · Payments account</div></div></div>
+    <button class="icon-btn" data-act="noop" aria-label="Notifications">${I.bell}</button></header>
+  <main class="scroll">
+    ${homeAlert()}
+    <div class="kpis"><div class="kpi"><span>Today's payments</span><b>${inr(48650)}</b></div><div class="kpi"><span>Payments this week</span><b>186</b></div></div>
+    <section><h2 class="sec">Recent payments</h2><div class="list">${pays.map(p => `<div class="row"><span class="row-ic t-good">${I.check}</span><div class="row-main"><div class="row-title">${p[0]}</div><div class="row-sub">${p[2]} · ${p[3]}</div></div><div class="row-amt">${inr(p[1])}</div></div>`).join('')}</div></section>
+  </main>
+  <nav class="tabbar" aria-label="Main"><button aria-current="page" data-act="noop">${I.home}Home</button><button data-act="noop">${I.receipt}Payments</button><button data-act="noop">${I.bank}Settlements</button><button data-act="noop">${I.user}Account</button></nav>`;
+}
+
+function stepper(active) {
+  const names = ['Requested', 'Submitted', 'In review', 'Decision'];
+  return `<div class="stepper" aria-label="Review progress">${names.map((n, i) => `<div class="${i <= active ? 'on' : ''}"><i></i>${n}</div>`).join('')}</div>`;
+}
+function scrCase() {
+  const c = counts();
+  const more = S.stage === 'more';
+  const orderCard = o => {
+    const x = S.items[o.id];
+    return `<button class="order" data-act="order" data-o="${o.id}"><div class="order-top"><span class="order-id">#${o.id} · ${esc(o.cust)}</span><span class="order-amt">${inr(o.amt)}</span></div>
+      <span class="order-sub">${dm(o.date)} · ${o.pay}</span>
+      <div class="chips">${chip('Invoice', x.inv, 'inv', o.id + '-inv')}${chip('Delivery', x.pod, 'pod', o.id + '-pod')}${x.conf || S.disp[o.id + '-conf'] ? chip('Confirmation', x.conf || { s: 'need' }, 'conf', S.disp[o.id + '-conf'] && x.conf ? o.id + '-conf' : null) : ''}</div></button>`;
+  };
+  const dLabel = S.delta && S.delta.kind === 'pod' ? 'Delivery proof' : 'Confirmation';
+  const deltaCard = more ? `<div class="delta"><b>${S.delta.merchant ? 'Add proof for your pending item' : `1 new item requested · ${dispCount('accepted')} accepted`}</b>
+      <span>#${S.delta.order} · ${esc(byO(S.delta.order).cust)} · ${inr(byO(S.delta.order).amt)}: ${esc(S.delta.ask)}</span>
+      ${S.delta.merchant ? '' : `<span class="sub">Linked to submission v${S.versions.length} · requirement ${deltaReq()} · reason category: customer identity not on invoice</span>`}
+      <div class="chips">${deltaItem() && itemDone(deltaItem()) ? chip(dLabel, deltaItem(), S.delta.kind) : `<span class="st need">${dLabel}: Needed</span>`}</div>
+      <button class="btn btn-secondary btn-sm" data-act="wa">${I.chat}Add a screenshot</button></div>` : '';
+  const fill = (act, ic, t, s, used, doneTxt) => `<button data-act="${act}" class="${used ? 'used' : ''}"><span class="fi">${used ? I.check : ic}</span><span class="ft"><b>${t}</b><small>${used ? doneTxt : s}</small></span>${used ? '' : `<span class="chev">${I.chev}</span>`}</button>`;
+  const due = (S.delta && S.delta.due) || CASE.due, left = daysBetween(S.today, due);
+  const ready = more ? deltaDone() : c.ready;
+  return `${bar('Settlement review', `<span class="step">${CASE.id}</span>`)}
+  <main class="scroll">
+    <section class="hero">
+      <span class="hero-label">Delivery check · held since ${dm(CASE.since)}</span>
+      <span class="hero-amt">${inr(CASE.held)}</span>
+      ${stepper(more ? 2 : 0)}
+      <div class="due"><span>Respond by <b>${wdm(due)}</b></span><span>${left > 0 ? `${left} day${left > 1 ? 's' : ''} left` : 'Due today'}</span></div>
+    </section>
+    <div class="reassure">${I.shield}<span>You can still accept payments. You'll get a review estimate as soon as you submit.</span></div>
+    ${deltaCard}
+    ${more ? '' : `<section class="card"><div class="need-head"><div><h3>Invoice and delivery proof for 6 payments</h3><div class="sub">Reviewers picked 6 of the ${CASE.recent} payments in this settlement</div></div><b class="num" aria-label="${c.done} of ${c.total} items ready">${c.done}/${c.total}${c.pending ? ` <span class="sub">+${c.pending} pending</span>` : ''}</b></div>
+      <div class="progress" aria-hidden="true"><i style="width:${Math.round(100 * c.done / c.total)}%"></i></div>
+      <div class="fill">
+        ${fill('pdf', I.file, 'Upload invoices', 'Your whole invoice export is fine. We find the 6.', S.used.pdf, `${ORDERS.filter(o => S.items[o.id].inv.s !== 'need').length} invoices matched`)}
+        ${fill('ship', I.truck, 'Get delivery status', 'Courier records from Shiprocket, by AWB', S.used.ship, `${ORDERS.filter(o => S.items[o.id].pod.src === 'courier').length} deliveries confirmed by courier record`)}
+        ${fill('wa', I.chat, 'Add screenshots or photos', 'From your gallery, or share from WhatsApp', ORDERS.some(o => S.items[o.id].pod.src === 'chat' || S.items[o.id].conf), 'Customer screenshot added')}
+      </div></section>`}
+    <section><h2 class="sec">${more ? `Review record: ${dispCount('accepted')} accepted · ${dispCount('in-review')} in review · ${dispCount('clarification') + dispCount('pending')} open` : 'Payments in this request'}</h2><div class="orders">${ORDERS.map(orderCard).join('')}</div></section>
+    <div class="links">
+      <button data-act="why">${I.lock}<span>Why is my settlement held?</span>${I.chev}</button>
+      <button data-act="hindi">${I.lang}<span>हिंदी में समझें</span>${I.chev}</button>
+      <button data-act="ladder">${I.ladder}<span>Review times and escalation</span>${I.chev}</button>
+    </div>
+  </main>
+  <footer class="cta">${more
+    ? `<button class="btn btn-primary btn-block" data-act="sendDelta" ${ready ? '' : 'disabled'}>Send 1 item</button><p class="cta-hint">Sent as submission v${S.versions.length + 1}. Earlier files stay as submitted.</p>`
+    : `<button class="btn btn-primary btn-block" data-act="go" data-to="review" ${ready ? '' : 'disabled'}>${ready ? (c.pending ? `Review evidence pack · ${c.pending} pending` : 'Review evidence pack') : `Review evidence pack · ${c.done} of ${c.total} ready`}</button>
+       <p class="cta-hint">${ready ? (c.pending ? 'The pending delivery goes with your note. Add proof once it arrives.' : 'Nothing is sent until you submit.') : c.flags ? 'Fix the flagged item, or add a note to explain it.' : 'Your progress is saved. Nothing is sent until you submit.'}</p>`}</footer>`;
+}
+
+function packFiles() {
+  let n = 0;
+  ORDERS.forEach(o => { const x = S.items[o.id]; if (x.inv.s !== 'need' && x.inv.s !== 'flag') n++; if (x.pod.src === 'courier' || x.pod.src === 'chat') n++; if (x.conf) n++; });
+  return n;
+}
+function packRows() {
+  return ORDERS.map(o => {
+    const x = S.items[o.id];
+    const inv = x.inv.s === 'note' ? `Invoice p.${invPage(o)} + note` : x.inv.replaced ? 'Invoice (replaced)' : `Invoice p.${invPage(o)}`;
+    const pod = x.pod.src === 'courier' ? `${o.courier}: delivered ${dm(o.delivered)}` : x.pod.src === 'chat' ? 'Customer screenshot' : x.pod.src === 'pending' ? 'Pending, with note' : '—';
+    return `<tr><td>#${o.id}</td><td>${inr(o.amt)}</td><td>${inv}</td><td>${pod}${x.conf ? ' + chat' : ''}</td></tr>`;
+  }).join('');
+}
+function scrReview() {
+  const notes = ORDERS.filter(o => S.items[o.id].inv.s === 'note' || S.items[o.id].pod.s === 'note');
+  return `${bar('Evidence pack', `<span class="step">${CASE.id}</span>`)}
+  <main class="scroll">
+    <p class="sub" style="margin:0">This is what the review team would receive: one indexed pack, each file mapped to a request line.</p>
+    <div class="paper">
+      <h4>Evidence index · ${CASE.id}</h4>
+      <div class="meta">${BIZ.name} · ${ORDERS.length} payments · ${packFiles()} files, one per request line · 1.4 MB (only the 6 invoice pages, not all 214)</div>
+      <table><thead><tr><th>Order</th><th>Amount</th><th>Invoice</th><th>Delivery proof</th></tr></thead><tbody>${packRows()}</tbody></table>
+      ${notes.length ? `<p style="margin:10px 0 0"><b>Merchant notes:</b> ${notes.map(o => `#${o.id}: ${esc(S.items[o.id].inv.note || S.items[o.id].pod.note)}`).join('; ')}</p>` : ''}
+    </div>
+    <div class="ai-foot">${I.sparkle}<span>Pages were linked to payments and amounts checked exactly${ORDERS.some(o => extOf(o)) ? ', from text read on this device' : ' (page reading simulated)'}. A Razorpay reviewer makes every decision; the automatic check never approves or rejects anything.</span></div>
+    <div class="ai-foot">${I.lock}<span>Only the files listed here are shared, and only with Razorpay's review team. They stay in this case's evidence locker; if anything new is needed, we'll say exactly what and why.</span></div>
+  </main>
+  <footer class="cta"><label class="decl" for="decl"><input type="checkbox" id="decl" ${S.declared ? 'checked' : ''}><span>I confirm these documents are genuine and relate to these payments.</span></label>
+    <button class="btn btn-primary btn-block" id="submit" data-act="submit" ${S.declared ? '' : 'disabled'}>Submit to Razorpay</button></footer>`;
+}
+
+function scrTracker() {
+  const rel = S.stage === 'released', cont = S.stage === 'continued', more = S.stage === 'more';
+  const ms = S.timer.end && S.timer.start ? S.timer.end - S.timer.start : null;
+  const last = S.versions[S.versions.length - 1];
+  const pend = REQS().filter(r => S.disp[r] === 'pending');
+  const tl = [
+    { k: 'done', t: 'Requested', s: `${dm(CASE.since)} · invoice and delivery proof for 6 sampled payments (sample set by risk policy)` },
+    ...S.versions.map(v => ({ k: 'done', t: `Submitted · v${v.v}`, s: `${dm(v.date)}, ${v.time} · ${v.line} · receipt ${v.id}` })),
+    { k: rel || cont ? 'done' : 'now', t: 'In review', s: rel || cont ? 'Reviewed' : `Estimated decision by ${wdm('2026-10-15')} (pilot target, not a promise). If that date passes, this screen shows a new next-update date.` },
+    { k: rel || cont ? 'done' : '', t: rel ? 'Released' : cont ? 'Review continues' : 'Decision', s: rel ? `${inr(CASE.held)} released ${dm('2026-10-15')}; expected in your bank ${wdm('2026-10-16')}` : cont ? `The hold stays for now. Next update by ${wdm('2026-10-20')}. Nothing new is needed from you.` : 'Release, a request for a specific item, or a continued review' },
+  ];
+  return `${bar('Review status', `<span class="step">${CASE.id}</span>`, 'home')}
+  <main class="scroll">
+    <section class="hero"><span class="hero-label">${rel ? 'Released' : cont ? 'Review continues' : 'In review'}</span><span class="hero-amt">${inr(CASE.held)}</span>${stepper(rel || cont ? 3 : 2)}</section>
+    ${last ? `<div class="receipt" id="receipt"><b>Submission receipt ${esc(last.id)}</b><span>v${last.v} · ${dm(last.date)}, ${last.time} · ${esc(last.line)}</span><span class="sub">Saved to this case. Reopen it any time, even after closing the app.</span></div>` : ''}
+    ${ms && !rel && !cont ? `<span class="stopwatch">${I.clock}Active task time ${dur(ms)}</span>` : ''}
+    ${pend.length && !more ? `<section class="card"><h3>${pend.length} item pending</h3><p class="sub" style="margin:6px 0 10px">${pend.map(r => '#' + r.split('-')[0]).join(', ')}: add delivery proof once it arrives. It goes as a new version; nothing already sent changes.</p><button class="btn btn-primary btn-sm" data-act="lateProof" data-o="${pend[0].split('-')[0]}">${I.chat}Add proof now</button></section>` : ''}
+    <section class="card"><ol class="timeline">${tl.map(x => `<li class="${x.k}"><span class="dot">${x.k === 'done' ? I.check : ''}</span><div><div class="tl-title">${x.t}</div><div class="tl-sub">${x.s}</div></div></li>`).join('')}</ol></section>
+    <section class="card"><h3>Review record</h3><p class="sub" style="margin:6px 0 0">${dispCount('accepted')} accepted · ${dispCount('in-review')} in review · ${dispCount('clarification')} need clarification · ${dispCount('pending')} pending. Each status is set by a reviewer for a named requirement.</p></section>
+    ${rel ? '' : `<section class="card"><h3>If you don't hear back</h3><p class="sub" style="margin:6px 0 10px">You can raise a complaint with Razorpay. If it isn't resolved in time, the grievance policy lets you escalate to the Assistant Nodal Officer. Dates run from when you lodge the complaint, not from this case.</p><button class="btn btn-secondary btn-sm" data-act="ladder">${I.ladder}See escalation steps</button></section>`}
+  </main>
+  <footer class="cta"><button class="btn btn-secondary btn-block" data-act="home">Back to home</button></footer>`;
+}
+
+function scrConfidential() {
+  return `${bar('Settlement review')}
+  <main class="scroll">
+    <section class="hero"><span class="hero-label">Under review since ${wdm(CASE.since)}</span><span class="hero-amt">${inr(CASE.held)}</span><div class="due"><span>Next update by <b>${wdm('2026-10-14')}</b></span><span>Case ${CASE.id}</span></div></section>
+    <section class="card"><h3>We're reviewing your settlement</h3><p class="sub" style="margin:6px 0 0">No documents are requested yet. If we need anything, it will appear here as a specific list. Updates also come by SMS.</p></section>
+    <div class="reassure">${I.shield}<span>You can still accept payments.</span></div>
+    <div class="links"><button data-act="why">${I.lock}<span>Why is my settlement held?</span>${I.chev}</button><button data-act="ladder">${I.ladder}<span>Escalation if you don't hear back</span>${I.chev}</button></div>
+  </main>`;
+}
+function scrPolice() {
+  return `${bar('Payment on hold')}
+  <main class="scroll">
+    <section class="hero"><span class="hero-label">Held since ${wdm('2026-10-10')}</span><span class="hero-amt">${inr(14999)}</span><span class="hero-sub">One payment · pay_Qm7tXr9L4P4401 · ${dm('2026-10-08')}</span></section>
+    <div class="reassure">${I.shield}<span>Only this payment is held. Your other settlements continue as normal.</span></div>
+    <section class="card"><h3>Why this payment is held</h3><p class="sub" style="margin:6px 0 0">A law enforcement agency asked for this payment to be held through the national cyber-fraud reporting system (CFCFRMS), usually after a customer reports a fraud. It doesn't mean you did anything wrong.</p></section>
+    <section class="card"><h3>What happens next</h3><ol class="timeline" style="margin-top:10px">
+      <li class="done"><span class="dot">${I.check}</span><div><div class="tl-title">Hold placed</div><div class="tl-sub">${dm('2026-10-10')} · notice reference CFCFRMS/2026/RJ/48213</div></div></li>
+      <li class="now"><span class="dot"></span><div><div class="tl-title">Raise a grievance with the order's invoice and delivery proof</div><div class="tl-sub">Through the CFCFRMS Grievance Redressal Module on the National Cyber Crime Reporting Portal (cybercrime.gov.in), or with the police station named in the notice</div></div></li>
+      <li><span class="dot"></span><div><div class="tl-title">Investigating officer responds</div><div class="tl-sub">Within 15 days of a grievance, under the January 2026 CFCFRMS procedure</div></div></li>
+      <li><span class="dot"></span><div><div class="tl-title">If there's no direction to continue</div><div class="tl-sub">The SOP's 90-day clock runs from when the bank raises the grievance, not from the hold date. Release isn't automatic: it needs a request and checks. Dates here come from the case record.</div></div></li></ol></section>
+    <section class="card"><h3>What Razorpay can and can't do</h3><p class="sub" style="margin:6px 0 0">Razorpay can't release this payment on its own or share the complaint's details. We'll update this screen when the agency responds, and you can escalate a delay through our grievance team.</p></section>
+  </main>
+  <footer class="cta"><button class="btn btn-primary btn-block" data-act="grievanceFile">Prepare my grievance file</button><button class="btn btn-secondary btn-block" data-act="noticeCopy">Copy notice reference</button><p class="cta-hint">Sample action: downloads a synthetic summary for your own grievance. Nothing is sent to Razorpay.</p></footer>`;
+}
+function scrRekyc() {
+  return `${bar('KYC update')}
+  <main class="scroll">
+    <section class="hero"><span class="hero-label">Periodic KYC update</span><span class="hero-amt">2 items</span><div class="due"><span>Deadline <b>${wdm('2026-11-12')}</b></span><span>Settlements paused</span></div></section>
+    <section class="card"><h3>Why settlements are paused</h3><p class="sub" style="margin:6px 0 0">Your periodic KYC update is due. Settlements pause 30 days before the deadline and resume once the update is approved. If it's still pending 60 days after the deadline, the account is disabled.</p></section>
+    <div class="list"><div class="row"><span class="row-ic t-warn">${I.file}</span><div class="row-main"><div class="row-title">GST certificate</div><div class="row-sub">The address on file has changed</div></div></div>
+      <div class="row"><span class="row-ic t-warn">${I.id}</span><div class="row-main"><div class="row-title">Proprietor's address proof</div><div class="row-sub">Aadhaar, passport or utility bill</div></div></div></div>
+  </main>
+  <footer class="cta"><button class="btn btn-primary btn-block" data-act="kycFlow">Update KYC</button><p class="cta-hint">Hands off to Razorpay's existing KYC update flow (not rebuilt here). No evidence pack is needed.</p></footer>`;
+}
+const SCREENS = { home: scrHome, case: scrCase, review: scrReview, tracker: scrTracker, confidential: scrConfidential, police: scrPolice, rekyc: scrRekyc };
+
+/* ---------- sheets ---------- */
+const sheetClosable = () => !!S.sheet && !(S.sheet.kind === 'ai' && !S.sheet.done) && !(S.sheet.kind === 'ship' && S.sheet.stage === 'loading');
+function sheetHtml() {
+  const sh = S.sheet;
+  if (!sh) return '';
+  const body = SHEETS[sh.kind](sh);
+  const closable = sheetClosable();
+  return `<div class="overlay"><button class="scrim" data-act="${closable ? 'closeSheet' : 'none'}" aria-label="Close" tabindex="-1"></button>
+    <div class="sheet${sheetFresh ? ' anim' : ''}" role="dialog" aria-modal="true" aria-labelledby="sheet-title"><div class="grab"></div>${closable ? `<button class="icon-btn sheet-x" data-act="closeSheet" aria-label="Close">${I.close}</button>` : ''}${body}</div></div>`;
+}
+const fileRow = (f, sel, act) => `<button class="file" data-act="${act}" data-f="${f.id}" aria-pressed="${sel}"><span class="thumb ${f.kind}${f.id === 'parcel' ? '' : ''}"></span><span class="file-main"><span class="file-name">${esc(f.name)}</span><br><span class="file-sub">${esc(f.sub)}</span></span><span class="tick">${sel ? I.check : ''}</span></button>`;
+const aiFoot = `<div class="ai-foot">${I.sparkle}<span>Reading is simulated in this prototype; the amount and order-number checks are real comparisons against the payment record. Matches are proposals: fix any result or add a note. A Razorpay reviewer decides.</span></div>`;
+const res = (k, title, sub) => `<div class="res ${k}"><span class="ic">${k === 'ok' ? I.check : k === 'flag' ? I.alert : k === 'soft' ? I.info : I.close}</span><div><div class="res-title">${title}</div><div class="res-sub">${sub}</div></div></div>`;
+
+const SHEETS = {
+  pickPdf: sh => `<h2>Choose your invoices</h2><p class="lead">Your whole invoice export is fine. We'll find the 6 orders we need, and only those pages are sent.</p>
+    <div class="files">${PDFS.map(f => fileRow(f, sh.sel === f.id, 'pickPdfFile')).join('')}
+      <button class="file" data-act="ownPdf"><span class="thumb pdf"></span><span class="file-main"><span class="file-name">Choose a PDF from this device</span><span class="file-sub">Real reading, on this device. Try samples/Ghoomar_invoices_SAMPLE.pdf</span></span><span class="tick">${I.chev}</span></button></div>
+    <input type="file" id="ownpdf" accept="application/pdf,.pdf" hidden>
+    <button class="btn btn-primary btn-block" data-act="runPdf" ${sh.sel ? '' : 'disabled'}>Check invoices</button>`,
+  confirmMatch: sh => { const q = sh.q[0], o = byO(q.o); return `<h2>Is page ${q.ext.page} the invoice for #${o.id}?</h2><p class="lead">This page has no order number, so we can't link it on our own. It shows <b>${esc(q.ext.name)}</b>, <b>${inr(q.ext.amount)}</b>${q.ext.date ? ', ' + esc(q.ext.date) : ''}, which matches payment #${o.id} (${esc(o.cust)}, ${inr(o.amt)}, ${dm(o.date)}).</p>
+    <div class="consent">${esc(q.ext.snippet)}</div>
+    <button class="btn btn-primary btn-block" data-act="confirmYes">Yes, link it to #${o.id}</button><button class="btn btn-secondary btn-block" data-act="confirmNo">No, it's a different order</button>`; },
+  pickWa: sh => `<h2>Add screenshots or photos</h2><p class="lead">${S.stage === 'more' ? `Pick the screenshot of ${esc(byO(S.delta.order).cust)}'s confirmation.` : 'Pick screenshots that show a customer received their order.'} Tip: in WhatsApp, long-press a message and share it to Razorpay.</p>
+    <div class="files">${PICS.map(f => fileRow(f, sh.sel.includes(f.id), 'pickWaFile')).join('')}</div>
+    <button class="btn btn-primary btn-block" data-act="runWa" ${sh.sel.length ? '' : 'disabled'}>Check ${sh.sel.length || ''} file${sh.sel.length === 1 ? '' : 's'}</button>`,
+  ai: sh => {
+    const steps = sh.real ? [`Reading ${sh.pages ? sh.pages + ' page' + (sh.pages > 1 ? 's' : '') : 'the file'} on this device`, 'Finding invoice pages, order numbers and totals', 'Checking each against the 6 payments'] : sh.job === 'pdf' ? ['Reading 214 pages', 'Finding the 6 requested orders', 'Checking amount, date and customer name'] : ['Reading the screenshots', 'Finding names, dates and messages', 'Matching to orders that still need proof'];
+    const list = `<ul class="steps">${steps.map((t, i) => `<li class="${i < sh.step ? 'done' : i === sh.step && !sh.done ? 'run' : ''}"><span class="sp">${i < sh.step ? I.check : ''}</span>${t}</li>`).join('')}</ul>`;
+    if (!sh.done) return `<h2>${sh.job === 'pdf' ? 'Checking invoices' : 'Checking files'}</h2>${list}`;
+    return `<h2>${sh.title}</h2>${sh.real ? `<p class="lead">Read from <b>${esc(sh.fname || 'your PDF')}</b> on this device; nothing was uploaded. Text extraction and the checks are real; linking pages without an order number needs your confirmation.</p>` : sh.job === 'pdf' && sh.sel === 'inv' ? '<p class="lead">The file is processed temporarily to find the 6 orders. Only these 6 pages are kept in the case (420 KB); the rest is deleted after processing. <span class="sim">Simulated reading</span></p>' : ''}<div class="results">${sh.results.join('')}</div>${sh.real ? '' : aiFoot}
+      ${sh.confirmQ && sh.confirmQ.length ? `<button class="btn btn-primary btn-block" data-act="confirmStart">Confirm ${sh.confirmQ.length} possible match${sh.confirmQ.length > 1 ? 'es' : ''}</button>` : sh.fix ? `<button class="btn btn-primary btn-block" data-act="fix" data-o="${sh.fix}">Fix #${sh.fix}</button>` : `<button class="btn btn-primary btn-block" data-act="closeSheet">Done</button>`}`;
+  },
+  ship: sh => {
+    if (sh.stage === 'consent') return `<h2>Get delivery status from Shiprocket</h2><p class="lead">Courier records are the strongest delivery proof, because the review team can verify them.</p>
+      <div class="consent"><b>For these 6 orders only, Razorpay will read:</b> delivery status and date, courier and AWB, and the consignee's name and PIN code, to check they match the order. Your Shiprocket account is already linked (assumed in this demo). Disconnect any time; files already submitted stay in the case.</div>
+      <button class="btn btn-primary btn-block" data-act="shipGo">Allow and fetch</button><button class="btn btn-secondary btn-block" data-act="shipDecline">Not now</button>`;
+    if (sh.stage === 'loading') return `<h2>Fetching delivery status <span class="sim">Simulated</span></h2><div class="spinnerwrap"><ul class="steps"><li class="run"><span class="sp"></span>Looking up 6 orders in Shiprocket</li></ul></div>`;
+    return `<h2>5 of 6 delivered, by courier record</h2><p class="lead">Retrieved ${S.shipAt || nowTime()} (simulated). A delivery record shows a parcel reached the consignee; it doesn't prove who authorised the payment.</p><div class="results">${ORDERS.map(o => o.delivered ? res('ok', `#${o.id} · delivered ${dm(o.delivered)}`, `${o.courier} AWB ${o.awb} · consignee name and PIN match the order`) : res('flag', `#${o.id} · no shipment found`, 'Hand-delivered? Add the customer’s confirmation, or mark it as not delivered yet.')).join('')}</div>
+      <button class="btn btn-primary btn-block" data-act="closeSheet">Done</button>`;
+  },
+  fix: sh => {
+    const o = byO(sh.o);
+    return `<h2>Explain #${o.id}</h2><p class="lead">${invAmtShown(o) !== o.amt ? `The invoice shows <b>${inr(invAmtShown(o))}</b>, but the payment was <b>${inr(o.amt)}</b>.` : `The name on the invoice differs from the payment's customer, ${esc(o.cust)}.`} Add a note, or upload the right invoice.</p>
+      <div class="notes" role="group" aria-label="Choose a note">${['₹200 shipping was charged separately', 'Gift wrapping added after the invoice', 'Customer paid for an extra item'].map(n => `<button data-act="pickNote" data-v="${esc(n)}" aria-pressed="${sh.note === n}">${esc(n)}</button>`).join('')}</div>
+      <button class="btn btn-primary btn-block" data-act="saveNote" ${sh.note ? '' : 'disabled'}>Add note</button>
+      <button class="btn btn-secondary btn-block" data-act="reupload" data-o="${o.id}">Upload the right invoice instead</button>`;
+  },
+  replaceInv: sh => `<h2>Replace the invoice for #${sh.o}</h2><p class="lead">Pick the corrected invoice. The original stays in the case so the reviewer sees both.</p>
+      <div class="files">${[{ id: 'rev', name: `INV-${sh.o}-revised.pdf`, sub: 'Downloads · 1 page · 180 KB', kind: 'pdf' }, { id: 'gst', name: 'GST_certificate.pdf', sub: 'WhatsApp Documents · 1 page', kind: 'pdf' }].map(f => fileRow(f, sh.sel === f.id, 'pickRepl')).join('')}</div>
+      <button class="btn btn-primary btn-block" data-act="checkRepl" ${sh.sel ? '' : 'disabled'}>Check replacement</button>`,
+  order: sh => {
+    const o = byO(sh.o), x = S.items[o.id];
+    const line = (label, it) => `<div class="row" style="padding:10px 0"><div class="row-main"><div class="row-title">${label}</div><div class="row-sub">${esc(it.detail || (it.s === 'need' ? 'Not added yet' : ''))}</div></div>${chip(label, it).replace(label + ': ', '')}</div>`;
+    return `<h2>#${o.id} · ${esc(o.cust)}</h2><p class="lead">${inr(o.amt)} · paid ${dm(o.date)} · ${o.pay}</p>
+      <div>${line('Invoice', x.inv)}${line('Delivery proof', x.pod)}${x.conf ? line('Customer confirmation', x.conf) : ''}</div>
+      ${x.inv.s === 'flag' ? `<button class="btn btn-primary btn-block" data-act="fix" data-o="${o.id}">Fix the invoice</button>` : ''}
+      ${x.inv.s === 'need' ? `<button class="btn btn-secondary btn-block" data-act="pdf">${I.file}Upload invoices</button>` : ''}
+      ${['ok', 'note', 'soft'].includes(x.inv.s) && S.stage === 'requested' ? `<button class="btn btn-secondary btn-block" data-act="reupload" data-o="${o.id}">${I.file}Replace this invoice</button>` : ''}
+      ${x.inv.s === 'note' && S.stage === 'requested' ? `<button class="btn btn-secondary btn-block" data-act="fix" data-o="${o.id}">Edit the note</button>` : ''}
+      ${x.pod.s === 'need' && !S.used.ship ? `<button class="btn btn-secondary btn-block" data-act="ship">${I.truck}Get delivery status from Shiprocket</button>` : ''}
+      ${x.pod.s === 'need' && !S.used.ship && S.shipDeclined && o.awb ? `<button class="btn btn-secondary btn-block" data-act="enterAwb" data-o="${o.id}">Enter the tracking number instead</button><button class="btn btn-secondary btn-block" data-act="wa">${I.chat}Add a customer's screenshot</button>` : ''}
+      ${x.pod.s === 'need' && S.used.ship ? `<button class="btn btn-secondary btn-block" data-act="wa">${I.chat}Add customer's screenshot</button><button class="btn btn-secondary btn-block" data-act="notDelivered" data-o="${o.id}">Not delivered yet</button>` : ''}
+      ${x.inv.s === 'soft' && !x.conf && S.stage === 'requested' ? `<button class="btn btn-secondary btn-block" data-act="wa">${I.chat}Add customer's screenshot (optional)</button><p class="cta-hint">Reviewers sometimes ask for this when the invoice has no customer name.</p>` : ''}`;
+  },
+  notDelivered: sh => `<h2>Not delivered yet</h2><p class="lead">Tell the review team when #${sh.o} will be delivered. It goes in the pack as pending, and you'll be reminded to add proof once it arrives.</p>
+    <div class="notes">${['Ships tomorrow', 'In transit, arriving in 2–3 days', 'Made to order, ships in a week'].map(n => `<button data-act="pickNote" data-v="${esc(n)}" aria-pressed="${sh.note === n}">${esc(n)}</button>`).join('')}</div>
+    <button class="btn btn-primary btn-block" data-act="saveNotDelivered" ${sh.note ? '' : 'disabled'}>Save</button>`,
+  why: () => `<h2>Why is my settlement held?</h2><p class="lead">${S.scenario === 'delivery' ? 'This is a delivery check. Reviewers confirm that a sample of recent orders was really sold and delivered, which protects you and your customers from fraud and chargebacks. ' : 'Your account is under a routine review. '}The specific signals behind any review stay confidential, so they can't be used to get around the checks. What we can tell you is ${S.scenario === 'delivery' ? 'exactly what completes the review, when you can expect a decision,' : 'when to expect an update'} and how to escalate.</p>
+    <div class="consent">Every request comes in this same case, as a specific list with the reason category (for example, "customer name not on invoice"), never the internal risk signals.</div><button class="btn btn-primary btn-block" data-act="closeSheet">Got it</button>`,
+  hindi: () => `<h2>हिंदी में</h2><p class="hi">आपका ${inr(CASE.held)} का सेटलमेंट डिलीवरी जांच के लिए रुका है। 6 ऑर्डर के लिए बिल (इनवॉइस) और डिलीवरी का सबूत चाहिए। ${wdm(CASE.due)} तक भेजें। पूरा पैक भेजते ही आपको जांच का अनुमानित समय दिखेगा। इस दौरान आप पेमेंट लेते रह सकते हैं।</p>
+    <div class="ai-foot">${I.lang}<span>An approved Hindi version of this request. The English request is the official one.</span></div><button class="btn btn-primary btn-block" data-act="closeSheet">ठीक है</button>`,
+  ladder: () => `<h2>Review times and escalation</h2><p class="lead">You'll see an estimated decision date once you submit. Missed the response date? You can still submit; the review starts when the pack is complete. Escalation dates run from when you lodge a complaint, using Razorpay's grievance policy; submitting evidence is not a complaint.</p>
+    <ol class="ladder"><li><b class="n">1</b><div><b>This case</b><br><span class="sub">Every update and request comes here.</span></div></li>
+      <li><b class="n">2</b><div><b>Assistant Nodal Officer</b><br><span class="sub">If there's no proper response within 10 business days.</span></div></li>
+      <li><b class="n">3</b><div><b>Nodal Officer</b><br><span class="sub">If there's still none within 20 business days. Final response within 30.</span></div></li>
+      <li><b class="n">4</b><div><b>RBI Integrated Ombudsman</b><br><span class="sub">May be an option if the complaint isn't resolved within 30 days.</span></div></li></ol>
+    <button class="btn btn-primary btn-block" data-act="closeSheet">Close</button>`,
+  confirmDelta: () => `<h2>Send 1 item as v${S.versions.length + 1}?</h2><p class="lead">Only the new ${S.delta.kind === 'pod' ? 'delivery proof' : 'confirmation'} for #${S.delta.order} is sent. Submission v${S.versions.length} and the reviewer's decisions on it stay unchanged.</p><button class="btn btn-primary btn-block" data-act="submitDelta">Send to Razorpay</button>`,
+};
+
+/* ---------- analyst console ---------- */
+function consoleHtml() {
+  const SCORE = { '1038': .99, '1041': .98, '1044': .97, '1046': .99, '1047': .98, '1052': .91 };
+  const yes = t => `<span class="ok-t">✓ ${t}</span>`, no = t => `<span class="no-t">✗ ${t}</span>`, na = t => `<span class="na-t">– ${t}</span>`;
+  const sourceRow = o => {
+    const x = S.items[o.id], inv = x.inv, pod = x.pod;
+    const e = extOf(o), shown = inv.replaced ? o.amt : invAmtShown(o), nm = nameOnInv(o);
+    const page = e && !inv.replaced ? `<div class="src-page"><b>Text read from page ${e.page} of ${esc(e.file || 'your PDF')}</b><br>${esc(e.snippet)}<br><span class="sub">Real extraction on this device (pdf.js text layer).</span></div>`
+      : `<div class="src-page"><b>${BIZ.name}</b><br>Tax invoice INV-${o.id} · page ${o.page} of 214<br>${dm(o.date)} 2026 · Bill to: ${o.noName ? '<i>(blank)</i>' : esc(o.cust)}<br>Items… Total <b>${inr(shown)}</b><br><span class="sub">Synthetic page; in production the original page image shows here.</span></div>`;
+    const orderTxt = e && !e.order ? no('no order number on the page; linked after the merchant confirmed') : yes('INV-' + o.id + ' = order #' + o.id);
+    const link = `Order no. ${orderTxt}<br>Amount ${shown === o.amt ? yes(inr(shown) + ' = payment') : no(inr(shown) + ' vs payment ' + inr(o.amt))}${inv.s === 'note' ? ` · merchant's explanation: “${esc(inv.note)}” (a claim, not verified)` : ''}<br>Date ${e ? (e.date ? yes(esc(e.date)) : na('not found')) : yes(dm(o.date))}<br>Customer name ${nm ? yes(esc(nm)) : no('not on invoice')}`;
+    const podTxt = pod.src === 'courier' ? `${o.courier} AWB ${o.awb}, delivered ${dm(o.delivered)}, retrieved ${S.shipAt || '13 Oct'} via Shiprocket <span class="sim">Simulated</span>. Proves a parcel reached the consignee; not who authorised the payment.`
+      : pod.src === 'chat' ? 'Merchant-supplied screenshot; the sender’s identity is not independently verified.'
+      : pod.src === 'awb' ? `Tracking number ${o.awb} entered by the merchant; not yet checked with the courier.`
+      : pod.src === 'pending' ? `Pending: ${esc(pod.note)}` : 'Not supplied';
+    return `<tr><td colspan="6"><div class="src">${page}<dl>
+      <dt>Received</dt><dd>${inv.s !== 'need' ? yes(inv.replaced ? 'replacement file; original kept' : 'page ' + invPage(o) + ' of ' + (e && e.file ? esc(e.file) : 'the uploaded export')) : no('missing')}</dd>
+      <dt>Linkage</dt><dd>${link}<br><span class="sub">Real check in this prototype: exact comparison against the payment record. ${e ? 'The page text was read on this device.' : 'Reading the page is simulated.'}</span></dd>
+      <dt>Authenticity</dt><dd>${na('Merchant-authored invoice. File-reuse search, edit forensics and GSTIN match are planned, not performed here.')}</dd>
+      <dt>Delivery</dt><dd>${podTxt}</dd>
+      <dt>Decision</dt><dd>Invoice: ${DL[S.disp[o.id + '-inv']] || '—'} · Delivery: ${DL[S.disp[o.id + '-pod']] || '—'}${S.disp[o.id + '-conf'] ? ' · Confirmation: ' + DL[S.disp[o.id + '-conf']] : ''}</dd>
+    </dl></div></td></tr>`;
+  };
+  const rows = ORDERS.map(o => {
+    const x = S.items[o.id];
+    const inv = x.inv.s === 'note' ? `<span class="pill t-warn">Mismatch + merchant claim</span><br><span class="sub">${inr(invAmtShown(o))} vs ${inr(o.amt)}: “${esc(x.inv.note)}”</span>`
+      : x.inv.replaced ? `<span class="pill t-warn">Replaced after flag</span><br><span class="sub">Original ${inr(x.inv.prevAmt)}; replacement ${inr(o.amt)}. Both kept.</span>`
+      : x.inv.confirmed ? `<span class="pill t-warn">Linked by merchant</span><br><span class="sub">No order no. on page; amount and name match</span>`
+      : x.inv.soft ? `<span class="pill t-good">Linked · no name</span><br><span class="sub">Order no. and amount match</span>` : `<span class="pill t-good">Linked</span><br><span class="sub">Order no., amount, date, name match</span>`;
+    const pod = x.pod.src === 'courier' ? `<span class="pill t-good">Tier 1 · courier record</span>` : x.pod.src === 'chat' ? `<span class="pill t-accent">Tier 3 · screenshot</span>` : x.pod.src === 'awb' ? `<span class="pill t-warn">Tracking no. · unverified</span>` : x.pod.src === 'pending' ? `<span class="pill t-warn">Pending</span>` : '<span class="sub">Missing</span>';
+    const extra = x.conf ? `<br><span class="pill t-accent">+ Tier 3 screenshot</span>` : '';
+    const canAct = S.stage === 'submitted';
+    const disp = ['inv', 'pod', 'conf'].map(k => { const r = o.id + '-' + k, d = S.disp[r]; if (!d) return ''; return `${k === 'inv' ? 'Inv' : k === 'pod' ? 'Del' : 'Conf'}: ${DL[d]}${canAct && ['in-review', 'clarification'].includes(d) && (k !== 'inv' || o.id !== '1052' || S.disp['1052-conf'] !== 'requested') ? ` <button class="linkbtn" data-act="accept" data-r="${r}">Accept</button>` : ''}`; }).filter(Boolean).join('<br>');
+    return `<tr><td><b>#${o.id}</b><br><span class="sub">${o.pay}</span></td><td class="num">${inr(o.amt)}</td><td>${inv}<br><span class="sub">${extOf(o) ? 'Read on device · page ' + invPage(o) : 'Illustrative score ' + SCORE[o.id].toFixed(2)}</span></td><td>${pod}${extra}</td><td>${disp || '—'}</td><td><button class="linkbtn" data-act="inspect" data-o="${o.id}" aria-expanded="${S.inspect === o.id}">${S.inspect === o.id ? 'Hide source' : 'View source'}</button></td></tr>${S.inspect === o.id ? sourceRow(o) : ''}`;
+  }).join('');
+  const pend = dispCount('pending');
+  const canAsk = S.stage === 'submitted' && !S.disp['1052-conf'] && !S.items['1052'].conf;
+  const inRev = dispCount('in-review') + dispCount('clarification');
+  const canRelease = S.stage === 'submitted' && allAccepted();
+  const canHold = S.stage === 'submitted';
+  return `<div class="console" role="dialog" aria-modal="true" aria-label="Risk review console">
+    <div class="c-head"><div><h2>Risk review console · internal <span class="sim">Simulated</span></h2><small>Submission ${S.versions.length ? 'v' + S.versions.length + ' · receipt ' + S.versions[S.versions.length - 1].id : '—'} · every status below is set per requirement</small></div><button class="icon-btn" data-act="analystClose" aria-label="Close">${I.close}</button></div>
+    <div class="c-body">
+      <div class="c-meta"><div>Case<b>${CASE.id}</b></div><div>Merchant<b>${BIZ.name}</b></div><div>Held<b>${inr(CASE.held)}</b></div><div>Hold type<b>Delivery check · sampled</b></div></div>
+      <div class="c-actions">
+        <button class="btn btn-secondary" data-act="acceptAll" ${S.stage === 'submitted' && dispCount('in-review') ? '' : 'disabled'}>Accept ${dispCount('in-review')} items in review</button>
+        <button class="btn btn-secondary" data-act="aAsk" ${canAsk ? '' : 'disabled'}>Ask for 1 item: confirmation for #1052</button>
+        <button class="btn btn-secondary" data-act="aContinue" ${canHold ? '' : 'disabled'}>Keep on hold</button>
+        <button class="btn btn-primary" data-act="aRelease" ${canRelease ? '' : 'disabled'}>Release ${inr(CASE.held)}</button>
+        ${S.stage === 'submitted' && !canRelease ? `<span class="sub">Release unlocks when every requirement is accepted (${inRev} in review${pend ? `, ${pend} pending` : ''}).</span>` : S.stage === 'more' ? '<span class="sub">Waiting for the merchant.</span>' : S.stage === 'released' ? '<span class="pill t-good">Released</span>' : S.stage === 'continued' ? '<span class="pill t-warn">Hold continues</span>' : '<span class="sub">Requests use approved templates only.</span>'}
+      </div>
+      <div class="c-summary">${I.sparkle}<span><b>Record: ${dispCount('accepted')} accepted · ${dispCount('in-review')} in review · ${dispCount('clarification')} clarification · ${pend} pending.</b> The 6 payments (${inr(ORDERS.reduce((t, o) => t + o.amt, 0))}) were sampled by risk policy from ${CASE.recent}; they inform the decision on the whole balance but don't prove it. Scores are illustrative, not calibrated. Open “View source” to see the page, the checked fields and what was not checked.</span></div>
+      <div class="c-table-wrap"><table class="c-table"><thead><tr><th>Payment</th><th>Amount</th><th>Invoice linkage</th><th>Delivery evidence</th><th>Disposition</th><th>Source</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="c-foot">The analyst decides; nothing is auto-accepted. Requests come from approved templates and show a reason category, never internal risk signals. Unclassified holds go to internal triage, not to the merchant.</p>
+    </div></div>`;
+}
+
+/* ---------- rendering ---------- */
+let lastScreen = null, sheetFresh = false, sheetWas = null;
+const KEY = 'srk-case-v2';
+function save() { try { S.timer.seen = Date.now(); const { sheet, analyst, inspect, ...keep } = S; localStorage.setItem(KEY, JSON.stringify(keep)); } catch (e) { /* storage blocked: the demo still works, without resume */ } }
+function clearSaved() { try { localStorage.removeItem(KEY); } catch (e) {} }
+function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && v.timer && v.timer.start && !v.timer.end && v.timer.seen) v.timer.start += Date.now() - v.timer.seen; /* active time only: time away doesn't count */ if (v && v.items && v.scenario) return Object.assign(fresh(v.scenario, (v.rev || 0) + 1), v, { sheet: null, analyst: false, inspect: null, rev: (v.rev || 0) + 1 }); } catch (e) {} return null; }
+let lastFocus = null;
+function trapFocus(e) {
+  const box = S.analyst ? document.querySelector('.console') : S.sheet ? document.querySelector('.sheet') : null;
+  if (!box) return;
+  const f = [...box.querySelectorAll('button:not([disabled]), input, [href], [tabindex]:not([tabindex="-1"])')];
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+function render() {
+  const scr = $('#screen'), prev = scr.querySelector('.scroll');
+  const keep = lastScreen === S.screen && prev ? prev.scrollTop : 0;
+  scr.innerHTML = SCREENS[S.screen]();
+  const now = scr.querySelector('.scroll'); if (now) now.scrollTop = keep;
+  lastScreen = S.screen;
+  renderSheet(); renderRail(); renderConsole();
+  save();
+}
+function renderSheet() {
+  sheetFresh = !!S.sheet && sheetWas !== S.sheet.kind;
+  if (sheetFresh) $('#toast').hidden = true;
+  if (sheetFresh) lastFocus = document.activeElement;
+  $('#sheet').innerHTML = sheetHtml();
+  const h = $('#sheet h2'); if (h) h.id = 'sheet-title';
+  const open = !!S.sheet;
+  $('#screen').inert = open; $('#push').inert = open;
+  if (sheetFresh) { const t = $('#sheet .sheet-x') || $('#sheet .sheet button'); if (t) t.focus({ preventScroll: true }); }
+  if (!open && sheetWas && lastFocus && document.contains(lastFocus)) { lastFocus.focus({ preventScroll: true }); lastFocus = null; }
+  sheetWas = S.sheet ? S.sheet.kind : null;
+}
+function renderConsole() {
+  const el = $('#console'), was = !el.hidden;
+  el.hidden = !S.analyst;
+  el.innerHTML = S.analyst ? consoleHtml() : '';
+  document.querySelector('.stage').inert = S.analyst;
+  if (S.analyst && !was) { const b = el.querySelector('.c-head .icon-btn'); if (b) b.focus({ preventScroll: true }); }
+  if (!S.analyst && was) { const b = $('#btn-analyst'); if (b) b.focus({ preventScroll: true }); }
+}
+function renderRail() {
+  $('#rail-date').textContent = full(S.today);
+  $('#types').innerHTML = Object.entries(TYPES).map(([k, t]) => `<button data-act="scenario" data-v="${k}" aria-pressed="${S.scenario === k}">${t.label}<small>${t.small}</small></button>`).join('');
+  $('#types-note').textContent = TYPE_NOTES[S.scenario];
+  const b = $('#btn-analyst'), h = $('#analyst-hint');
+  const ok = S.scenario === 'delivery' && S.stage !== 'requested';
+  b.disabled = !ok;
+  b.innerHTML = `${I.console}Open the risk analyst's view`;
+  h.textContent = S.scenario !== 'delivery' ? 'The analyst view belongs to the delivery-check case.' : S.stage === 'requested' ? 'Available after the merchant submits the pack.' : S.stage === 'more' ? (S.delta && S.delta.merchant ? 'The merchant is adding proof for a pending item.' : 'The merchant has been asked for 1 item.') : S.stage === 'released' ? 'Case closed: settlement released.' : S.stage === 'continued' ? 'Review continues; the merchant has a next-update date.' : 'Inspect sources, then ask for one item, keep the hold, or release.';
+  $('#tryit').hidden = S.scenario !== 'delivery';
+  tickClock();
+}
+function dur(ms) { const s = Math.max(1, Math.round(ms / 1000)); return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${s % 60} s`; }
+function tickClock() {
+  const el = $('#rail-clock'), t = S.timer;
+  if (!t.start) { el.textContent = '0:00'; el.className = 'clock-val'; return; }
+  const s = Math.floor(((t.end || Date.now()) - t.start) / 1000);
+  el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  el.className = 'clock-val' + (t.end ? ' ok' : '');
+}
+setInterval(() => { if (S && S.timer.start && !S.timer.end) { tickClock(); S.timer.seen = Date.now(); } }, 250);
+window.addEventListener('pagehide', () => { try { save(); } catch (e) {} });
+let toastT, pushT;
+function toast(m) { const el = $('#toast'); el.textContent = m; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 3000); }
+function push(p) {
+  const el = $('#push');
+  el.innerHTML = `<span class="push-ic">${I.bell}</span><span><span class="push-app">Razorpay · now</span><br><span class="push-title">${esc(p.title)}</span><br><span class="push-body">${esc(p.body)}</span></span>`;
+  el.dataset.to = p.to || ''; el.hidden = false; $('#toast').hidden = true;
+  clearTimeout(pushT); if (!p.sticky) pushT = setTimeout(() => { el.hidden = true; }, 20000);
+}
+function startTimer() { if (!S.timer.start) S.timer.start = Date.now(); }
+
+/* ---------- AI simulations ---------- */
+let jobSeq = 0;
+const jobAlive = (id, rev) => id === jobSeq && rev === S.rev;
+function runAi(job, sel) {
+  const id = ++jobSeq, rev = S.rev;
+  S.sheet = { kind: 'ai', job, step: 0, done: false, sel };
+  renderSheet();
+  const tick = () => {
+    if (!jobAlive(id, rev) || !S.sheet || S.sheet.kind !== 'ai') return;
+    S.sheet.step++;
+    if (S.sheet.step >= 3) { finishAi(); return; }
+    renderSheet(); setTimeout(tick, 550);
+  };
+  setTimeout(tick, 550);
+}
+let pdfjsP = null;
+function loadPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  if (pdfjsP) return pdfjsP;
+  const tryLoad = (src, worker) => new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = src; sc.onload = () => { if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = worker; ok(window.pdfjsLib); } else no(new Error('load')); }; sc.onerror = () => no(new Error('load')); document.head.appendChild(sc); });
+  pdfjsP = tryLoad('vendor/pdf.min.js', 'vendor/pdf.worker.min.js').catch(() => tryLoad('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'));
+  pdfjsP.catch(() => { pdfjsP = null; });
+  return pdfjsP;
+}
+const num = t => t ? Number(String(t).replace(/,/g, '')) : null;
+const normName = t => String(t || '').toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
+function parsePage(n, text) {
+  const t = text.replace(/\s+/g, ' ').trim();
+  let name = (t.match(/Bill to:?\s*([A-Z][a-zA-Z]+(?:\s+[A-Z][a-z]*\.?)?)/) || [])[1] || null;
+  if (name && /^(Item|Amount|Total)\b/.test(name)) name = null;
+  return {
+    page: n, isInvoice: /tax invoice/i.test(t),
+    order: (t.match(/Order\s*(?:No\.?|#)?\s*:?\s*#\s*(\d{3,8})/i) || t.match(/Order\s*No\.?\s*:?\s*(\d{3,8})/i) || [])[1] || null,
+    amount: num((t.match(/Total\s*(?:\(INR\))?\s*:?\s*(?:Rs\.?|INR|₹)\s*([\d,]+)/i) || [])[1]),
+    date: (t.match(/Date:?\s*(\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4})/) || [])[1] || null,
+    name, snippet: t.slice(0, 260),
+  };
+}
+async function runReal(file) {
+  const id = ++jobSeq, rev = S.rev;
+  S.sheet = { kind: 'ai', job: 'pdf', real: true, fname: file.name, step: 0, done: false };
+  renderSheet();
+  const fail = (title, why) => { if (!jobAlive(id, rev)) return; S.sheet = { kind: 'ai', job: 'pdf', real: true, fname: file.name, done: true, step: 3, title, results: [res('skip', title, why)] }; renderSheet(); };
+  try {
+    if (file.size > 15e6) return fail('This file is too large', 'The limit is 15 MB. Export only the invoices for this month, or split the PDF.');
+    const lib = await loadPdfJs();
+    const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    if (!jobAlive(id, rev)) return;
+    S.sheet.pages = doc.numPages; S.sheet.step = 1; renderSheet();
+    const pages = [];
+    for (let i = 1; i <= Math.min(doc.numPages, 400); i++) { const pg = await doc.getPage(i); const tc = await pg.getTextContent(); pages.push(parsePage(i, tc.items.map(t => t.str).join(' '))); }
+    if (!jobAlive(id, rev)) return;
+    S.sheet.step = 2; renderSheet();
+    await new Promise(r => setTimeout(r, 350));
+    if (!jobAlive(id, rev)) return;
+    if (!pages.some(p => p.snippet)) return fail('No text found in this PDF', 'It may be a scanned image. Scanned invoices need OCR, which this prototype doesn’t include. Try a PDF exported from your billing app.');
+    finishReal(pages, file.name);
+  } catch (e) {
+    if (String(e && e.message) === 'load') return fail('Couldn’t start the PDF reader', 'This page needs the bundled reader in /vendor, or an internet connection. Use the sample files instead.');
+    return fail('Couldn’t read this PDF', 'It may be password-protected or damaged. Choose another file, or try the sample.');
+  }
+}
+function finishReal(pages, fname) {
+  const sh = S.sheet, inv = pages.filter(p => p.isInvoice), out = [], q = [];
+  if (!inv.length) { sh.results = [res('skip', 'No invoice pages found', `Read ${pages.length} page${pages.length > 1 ? 's' : ''}; none is a tax invoice. Nothing was added.`)]; sh.title = 'No invoices found'; sh.done = true; sh.step = 3; renderSheet(); return; }
+  const used = new Set();
+  sh.fix = null;
+  ORDERS.forEach(o => {
+    const x = S.items[o.id];
+    if (!['need', 'flag'].includes(x.inv.s)) return;
+    const pg = inv.find(p => p.order === o.id);
+    if (pg) {
+      used.add(pg.page);
+      const ext = { page: pg.page, order: pg.order, amount: pg.amount, name: pg.name, date: pg.date, snippet: pg.snippet, file: fname };
+      if (pg.amount !== o.amt) { x.inv = { s: 'flag', ext, detail: `Page ${pg.page}: invoice shows ${inr(pg.amount)}; payment was ${inr(o.amt)}` }; sh.fix = sh.fix || o.id; out.push(res('flag', `#${o.id} · page ${pg.page} · amount doesn't match`, `Invoice ${inr(pg.amount)}, payment ${inr(o.amt)}. Explain it or replace the invoice.`)); }
+      else if (!pg.name) { x.inv = { s: 'soft', soft: true, ext, detail: `Page ${pg.page}: order number and amount match; no customer name` }; out.push(res('soft', `#${o.id} · page ${pg.page} · matched, but no customer name`, 'Reviewers sometimes ask for a customer confirmation when the name is missing.')); }
+      else if (normName(pg.name) !== normName(o.cust)) { x.inv = { s: 'flag', ext, detail: `Page ${pg.page}: name ${pg.name} differs from ${o.cust}` }; sh.fix = sh.fix || o.id; out.push(res('flag', `#${o.id} · page ${pg.page} · name differs`, `Invoice says ${esc(pg.name)}; the payment is from ${esc(o.cust)}.`)); }
+      else { x.inv = { s: 'ok', ext, detail: `Page ${pg.page}: ${inr(pg.amount)}${pg.date ? ', ' + pg.date : ''}, ${pg.name}` }; out.push(res('ok', `#${o.id} · page ${pg.page} · matched`, `Order no., ${inr(pg.amount)} and ${esc(pg.name)} match exactly.`)); }
+      return;
+    }
+    const c = inv.filter(p => !p.order && p.amount === o.amt && p.name && normName(p.name) === normName(o.cust));
+    if (c.length) { c.forEach(p => used.add(p.page)); q.push({ o: o.id, ext: { page: c[0].page, order: null, amount: c[0].amount, name: c[0].name, date: c[0].date, snippet: c[0].snippet, file: fname } }); out.push(res('soft', `#${o.id} · page ${c[0].page} · possible match`, 'No order number on the page; amount and name match. Needs your confirmation.')); }
+    else out.push(res('flag', `#${o.id} · not found in this file`, 'No invoice page has this order number. Add another file, or open the order.'));
+  });
+  const other = inv.filter(p => !used.has(p.page)).length, nonInv = pages.length - inv.length;
+  if (other || nonInv) out.push(res('skip', 'Other pages ignored', `${other ? other + ' invoice' + (other > 1 ? 's' : '') + ' for orders not in this request' : ''}${other && nonInv ? '; ' : ''}${nonInv ? nonInv + ' page' + (nonInv > 1 ? 's' : '') + " that aren't invoices" : ''}. Only matched pages go in the pack.`));
+  const matched = ORDERS.filter(o => S.items[o.id].inv.ext).length;
+  if (matched || q.length) S.used.pdf = true;
+  sh.results = out; sh.confirmQ = q; sh.title = `${matched} of 6 invoices found${q.length ? ' · ' + q.length + ' to confirm' : ''}${sh.fix ? ' · 1 needs a fix' : ''}`;
+  sh.done = true; sh.step = 3; render();
+}
+function finishAi() {
+  const sh = S.sheet;
+  if (sh.job === 'pdf') {
+    if (sh.sel !== 'inv') {
+      sh.results = [res('skip', sh.sel === 'gst' ? 'This is a GST certificate, not an invoice' : 'This looks like a catalogue, not invoices', 'Nothing was added. Choose the PDF with your order invoices.')];
+      sh.title = 'No invoices found'; sh.done = true; sh.step = 3; renderSheet(); return;
+    }
+    sh.results = ORDERS.map(o => {
+      const x = S.items[o.id];
+      if (o.invAmt) { x.inv = { s: 'flag', detail: `Page ${o.page}: invoice shows ${inr(o.invAmt)}; payment was ${inr(o.amt)}` }; return res('flag', `#${o.id} · page ${o.page} · amount doesn't match`, `Invoice ${inr(o.invAmt)}, payment ${inr(o.amt)}. Explain it now so the reviewer has the answer up front.`); }
+      if (o.noName) { x.inv = { s: 'soft', soft: true, detail: `Page ${o.page}: matched on order number and amount; no customer name on the invoice` }; return res('soft', `#${o.id} · page ${o.page} · matched, but no customer name`, 'Reviewers sometimes ask for a customer confirmation when the name is missing.'); }
+      x.inv = { s: 'ok', detail: `Page ${o.page}: ${inr(o.amt)}, ${dm(o.date)}, ${o.cust}` };
+      return res('ok', `#${o.id} · page ${o.page} · matched`, `${inr(o.amt)} · ${dm(o.date)} · ${o.cust}`);
+    });
+    sh.title = '6 of 214 invoices matched · 1 needs a fix'; sh.fix = '1044'; S.used.pdf = true;
+  } else {
+    const out = [];
+    sh.sel.forEach(id => {
+      const f = PICS.find(p => p.id === id);
+      if (id === 'simran') {
+        const x = S.items['1047'];
+        if (x.pod.s === 'ok') { out.push(res('skip', 'Simran D.: already added', 'Nothing new.')); return; }
+        x.pod = { s: 'ok', src: 'chat', detail: 'Customer screenshot, 6 Oct: name and date match' };
+        out.push(res('ok', 'WhatsApp chat with Simran D. → #1047', `${f.text} · 6 Oct, after the order date. Counts as customer confirmation.`));
+      } else if (id === 'meera') {
+        const x = S.items['1052'];
+        x.conf = { s: 'ok', src: 'chat', detail: 'Customer screenshot, 10 Oct: name matches' };
+        out.push(res('ok', 'WhatsApp chat with Meera J. → #1052', `${f.text} · 10 Oct. Added as customer confirmation, which covers the missing name on the invoice.`));
+      } else if (id === 'kavya') {
+        const x = S.items['1046'];
+        if (x.pod.src === 'courier') out.push(res('skip', 'WhatsApp chat with Kavya R.: not needed', '#1046 already has a courier record. Nothing was added.'));
+        else if (x.pod.s === 'need') { x.pod = { s: 'ok', src: 'chat', detail: 'Customer screenshot, 9 Oct: name matches. A courier record would be stronger.' }; out.push(res('ok', 'WhatsApp chat with Kavya R. → #1046', `${f.text} · 9 Oct. Added as supporting evidence; a courier record would be stronger.`)); }
+        else out.push(res('skip', 'Kavya R.: already added', 'Nothing new.'));
+      } else {
+        out.push(res('skip', 'Photo of packed parcels: not proof of delivery', 'It doesn’t show a customer receiving an order. Nothing was added.'));
+      }
+    });
+    const added = out.filter(r => r.includes('res ok')).length;
+    sh.results = out; sh.title = added ? `Checked ${sh.sel.length} file${sh.sel.length > 1 ? 's' : ''} · ${added} added` : `Checked ${sh.sel.length} file${sh.sel.length > 1 ? 's' : ''} · nothing added`;
+  }
+  sh.done = true; sh.step = 3;
+  render();
+}
+
+/* ---------- actions ---------- */
+function go(to) { S.stack.push(S.screen); S.screen = to; render(); }
+const A = {
+  none() {}, noop() { toast('Outside this prototype. The Settlement Review Kit is the only new part.'); },
+  back() { S.screen = S.stack.pop() || 'home'; render(); },
+  home() { S.stack = []; S.screen = 'home'; render(); },
+  go(el) { go(el.dataset.to); },
+  openCase(el) { if (S.scenario === 'delivery' && S.stage !== 'submitted' && S.stage !== 'released') startTimer(); go(el.dataset.to); },
+  pushTap(el) { $('#push').hidden = true; const to = el.dataset.to; if (!to) return; if (to === 'case') startTimer(); S.stack = ['home']; S.screen = to; S.sheet = null; render(); },
+  pdf() { if (S.used.pdf && !ORDERS.some(o => S.items[o.id].inv.s === 'need')) { toast('Invoices are already added. Open an order to replace its invoice.'); return; } S.sheet = { kind: 'pickPdf', sel: 'inv' }; renderSheet(); },
+  pickPdfFile(el) { S.sheet.sel = el.dataset.f; renderSheet(); },
+  runPdf() { runAi('pdf', S.sheet.sel); },
+  ownPdf() { const i = $('#ownpdf'); if (i) i.click(); },
+  confirmStart() { const sh = S.sheet; S.sheet = { kind: 'confirmMatch', q: sh.confirmQ.slice(), fix: sh.fix }; renderSheet(); },
+  confirmYes() { const sh = S.sheet, c = sh.q.shift(), o = byO(c.o); S.items[o.id].inv = { s: 'ok', confirmed: true, ext: c.ext, detail: `Page ${c.ext.page}: no order number; you confirmed it's this order (amount and name match)` }; if (sh.q.length) { renderSheet(); return; } S.sheet = null; render(); toast(`Page ${c.ext.page} linked to #${o.id}. The reviewer sees that you confirmed it.`); if (sh.fix) setTimeout(() => { S.sheet = { kind: 'fix', o: sh.fix, note: null }; renderSheet(); }, 50); },
+  confirmNo() { const sh = S.sheet, c = sh.q.shift(); if (sh.q.length) { renderSheet(); return; } S.sheet = null; render(); toast(`Not linked. #${c.o} still needs its invoice.`); },
+  ship() { if (S.used.ship) { S.sheet = { kind: 'ship', stage: 'done' }; renderSheet(); return; } S.sheet = { kind: 'ship', stage: 'consent' }; renderSheet(); },
+  shipGo() {
+    const id = ++jobSeq, rev = S.rev;
+    S.sheet.stage = 'loading'; renderSheet();
+    setTimeout(() => {
+      if (!jobAlive(id, rev)) return; /* reset or case switch while fetching: drop the stale result */
+      ORDERS.forEach(o => { const x = S.items[o.id]; if (o.delivered && x.pod.src !== 'pending') x.pod = { s: 'ok', src: 'courier', detail: `Courier record: delivered ${dm(o.delivered)} (AWB ${o.awb})` }; else if (x.pod.s === 'need') x.pod = { s: 'need', detail: 'No courier record. Add a customer confirmation or delivery photo.' }; });
+      S.used.ship = true; S.shipDeclined = false; S.shipAt = nowTime(); S.sheet = { kind: 'ship', stage: 'done' }; render();
+    }, 1100);
+  },
+  shipDecline() { S.shipDeclined = true; S.sheet = null; render(); toast('Not connected. Open an order to enter its tracking number or add a screenshot instead.'); },
+  enterAwb(el) { const o = byO(el.dataset.o); S.items[o.id].pod = { s: 'ok', src: 'awb', detail: `Tracking number ${o.awb} entered by you; the reviewer checks it with the courier` }; S.sheet = null; render(); toast(`Tracking number saved for #${o.id}. Marked as not yet verified.`); },
+  lateProof(el) { const o = el.dataset.o; S.delta = { order: o, kind: 'pod', merchant: true, ask: 'Add delivery proof for this order now that it has arrived.' }; S.stage = 'more'; S.stack = ['home']; S.screen = 'case'; render(); },
+  pickRepl(el) { S.sheet.sel = el.dataset.f; renderSheet(); },
+  checkRepl() {
+    const sh = S.sheet, o = byO(sh.o);
+    if (sh.sel !== 'rev') { toast('That file is a GST certificate, not an invoice. Nothing was replaced.'); return; }
+    const prev = S.items[o.id].inv;
+    const was = invAmtShown(o);
+    S.items[o.id].inv = { s: 'ok', replaced: true, prevAmt: was, detail: `Replacement shows ${inr(o.amt)}, matching the payment. The original${was !== o.amt ? ` (${inr(was)})` : ''} stays in the case for the reviewer.`, prevNote: prev.note };
+    S.sheet = null; render(); toast(`Replacement for #${o.id} checked: ${inr(o.amt)} matches the payment.`);
+  },
+  wa() { S.sheet = { kind: 'pickWa', sel: [] }; renderSheet(); },
+  pickWaFile(el) { const s = S.sheet.sel, f = el.dataset.f; S.sheet.sel = s.includes(f) ? s.filter(x => x !== f) : [...s, f]; renderSheet(); },
+  runWa() { runAi('wa', S.sheet.sel); },
+  fix(el) { S.sheet = { kind: 'fix', o: el.dataset.o, note: null }; renderSheet(); },
+  pickNote(el) { S.sheet.note = el.dataset.v; renderSheet(); },
+  saveNote() { const sh = S.sheet; S.items[sh.o].inv = { s: 'note', note: sh.note, detail: `Note: ${sh.note}` }; S.sheet = null; render(); toast(`Note added to #${sh.o}. The reviewer sees it next to the invoice.`); },
+  reupload(el) { S.sheet = { kind: 'replaceInv', o: el.dataset.o, sel: null }; renderSheet(); },
+  order(el) { S.sheet = { kind: 'order', o: el.dataset.o }; renderSheet(); },
+  notDelivered(el) { S.sheet = { kind: 'notDelivered', o: el.dataset.o, note: null }; renderSheet(); },
+  saveNotDelivered() { const sh = S.sheet; S.items[sh.o].pod = { s: 'note', src: 'pending', note: sh.note, detail: `Not delivered yet: ${sh.note}` }; S.sheet = null; render(); toast(`Saved as pending. After you submit, the case lets you add proof for #${sh.o}.`); },
+  why() { S.sheet = { kind: 'why' }; renderSheet(); }, hindi() { S.sheet = { kind: 'hindi' }; renderSheet(); }, ladder() { S.sheet = { kind: 'ladder' }; renderSheet(); },
+  closeSheet() { S.sheet = null; renderSheet(); },
+  submit() {
+    if (!S.declared || S.stage !== 'requested') return; /* idempotent: a second tap can't create a second pack */
+    S.timer.end = Date.now(); S.stage = 'submitted'; S.submittedAt = S.today;
+    S.packLine = packLine();
+    REQS().forEach(r => { const it = reqItem(r); if (it) S.disp[r] = isPending(it) ? 'pending' : 'in-review'; });
+    S.versions.push({ v: 1, id: `${CASE.id}-v1`, date: S.today, time: nowTime(), line: S.packLine });
+    S.log.push({ date: S.today, text: 'Evidence pack submitted: ' + S.packLine });
+    S.stack = ['home']; S.screen = 'tracker'; render();
+    toast('Pack received. Your receipt is saved in this case.');
+  },
+  sendDelta() { S.sheet = { kind: 'confirmDelta' }; renderSheet(); },
+  submitDelta() {
+    if (S.stage !== 'more' || !deltaDone()) return;
+    const r = deltaReq(), v = S.versions.length + 1;
+    S.disp[r] = 'in-review';
+    S.versions.push({ v, id: `${CASE.id}-v${v}`, date: S.today, time: nowTime(), line: `1 item: ${S.delta.kind === 'pod' ? 'delivery proof' : 'customer confirmation'} for #${S.delta.order}` });
+    S.stage = 'submitted'; S.round = v; S.delta = null; S.sheet = null; S.stack = ['home']; S.screen = 'tracker'; render(); toast(`Sent as v${v}. Only the new item went to the reviewer.`);
+  },
+  analystOpen() { S.analyst = true; renderConsole(); },
+  analystClose() { S.analyst = false; renderConsole(); },
+  aAsk() {
+    S.disp['1052-inv'] = 'clarification';
+    S.disp['1052-conf'] = 'requested';
+    S.delta = { order: '1052', kind: 'conf', ask: 'the invoice doesn’t show the customer’s name. Add the customer’s confirmation, such as a chat screenshot.', due: '2026-10-16' };
+    S.stage = 'more'; S.today = '2026-10-14'; S.analyst = false; S.sheet = null; S.stack = []; S.screen = 'home'; render();
+    push({ title: '1 more item for your settlement review', body: `Customer confirmation for order #1052. ${dispCount('accepted')} items are accepted.`, to: 'case' });
+  },
+  aRelease() {
+    if (S.stage !== 'submitted' || !allAccepted()) return;
+    S.stage = 'released'; S.today = '2026-10-15'; S.analyst = false; S.sheet = null; S.stack = []; S.screen = 'home'; render();
+    push({ title: 'Settlement released', body: `${inr(CASE.held)} will reach your bank on ${wdm('2026-10-16')}.`, to: 'tracker' });
+  },
+  aContinue() {
+    S.stage = 'continued'; S.today = '2026-10-15'; S.analyst = false; S.sheet = null; S.stack = []; S.screen = 'home'; render();
+    push({ title: 'Your settlement review continues', body: `Nothing new is needed from you. Next update by ${wdm('2026-10-20')}.`, to: 'tracker' });
+  },
+  accept(el) { const r = el.dataset.r; if (['in-review', 'clarification'].includes(S.disp[r])) { S.disp[r] = 'accepted'; S.audit = (S.audit || []).concat({ r, at: nowTime(), by: 'analyst', policy: 'DC-sample-v1' }); } render(); },
+  acceptAll() { REQS().filter(r => S.disp[r] === 'in-review').forEach(r => { S.disp[r] = 'accepted'; S.audit = (S.audit || []).concat({ r, at: nowTime(), by: 'analyst', policy: 'DC-sample-v1' }); }); render(); },
+  inspect(el) { S.inspect = S.inspect === el.dataset.o ? null : el.dataset.o; renderConsole(); },
+  scenario(el) { jobSeq++; S = fresh(el.dataset.v, S.rev + 1); $('#push').hidden = true; render(); setTimeout(firstPush, 500); },
+  reset() { jobSeq++; S = fresh(S.scenario, S.rev + 1); clearSaved(); $('#push').hidden = true; $('#toast').hidden = true; render(); setTimeout(firstPush, 500); },
+  noticeCopy() {
+    const ref = 'CFCFRMS/2026/RJ/48213';
+    try { navigator.clipboard.writeText(ref).then(() => toast(`Copied ${ref} (sample reference)`), () => toast(`Copy isn't allowed here. Reference: ${ref}`)); } catch (e) { toast(`Copy isn't allowed here. Reference: ${ref}`); }
+  },
+  grievanceFile() {
+    const txt = ['SAMPLE ONLY: synthetic data from the Settlement Review Kit prototype', '', 'Grievance summary for a held payment', 'Payment: pay_Qm7tXr9L4P4401 · ₹14,999 · 8 Oct 2026', 'Notice reference: CFCFRMS/2026/RJ/48213 · hold placed 10 Oct 2026', 'Attach: invoice and courier delivery record for this order', 'Where to file: CFCFRMS Grievance Redressal Module, National Cyber Crime Reporting Portal'].join('\n');
+    try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' })); a.download = 'SAMPLE_grievance_summary.txt'; document.body.appendChild(a); a.click(); a.remove(); toast('Downloaded a sample grievance summary (synthetic).'); } catch (e) { toast('Downloads are blocked here. In the app this saves a grievance summary.'); }
+  },
+  kycFlow() { toast('Sample only: this hands off to Razorpay\'s existing KYC update flow.'); },
+};
+function firstPush() {
+  const p = {
+    delivery: { title: 'Settlement on hold: action needed', body: `We need an invoice and delivery proof for 6 payments to review ${inr(CASE.held)}. Respond by ${wdm(CASE.due)}.`, to: 'case' },
+    confidential: { title: 'Settlement under review', body: 'No action is needed from you right now. We’ll update you here.', to: 'confidential' },
+    police: { title: 'One payment on hold', body: `${inr(14999)} is held at a police request. Your other settlements continue.`, to: 'police' },
+    rekyc: { title: 'Settlements paused: KYC update due', body: `Update 2 items by ${wdm('2026-11-12')} to resume settlements.`, to: 'rekyc' },
+  }[S.scenario];
+  push(Object.assign({ sticky: true }, p));
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const fn = A[el.dataset.act]; if (fn) fn(el);
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'decl') { S.declared = e.target.checked; $('#submit').disabled = !S.declared; }
+  if (e.target.id === 'ownpdf' && e.target.files && e.target.files[0]) runReal(e.target.files[0]);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (S.analyst) A.analystClose(); else if (S.sheet && sheetClosable()) A.closeSheet(); }
+  if (e.key === 'Tab') trapFocus(e);
+});
+
+const restored = load();
+S = restored || fresh();
+render();
+if (restored) { const t = S.stage === 'requested' ? `Restored your saved progress: ${counts().done} of 12 items.` : `Restored case ${CASE.id}: ${S.versions.length ? 'receipt ' + S.versions[S.versions.length - 1].id : 'in progress'}.`; setTimeout(() => toast(t), 300); if (S.stage === 'requested' && S.screen === 'home') setTimeout(firstPush, 700); }
+else setTimeout(firstPush, 700);
+})();
+</script>
+</body>
+</html>
